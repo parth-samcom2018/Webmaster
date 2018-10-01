@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.util.Log
 import android.view.Window
+import android.widget.Toast
+import com.digitalmid.seograph_webmasters_tool.com.digitalmid.seograph_webmasters_tool.LoginModel
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -24,6 +26,9 @@ import kotlinx.android.synthetic.main.activity_auth.*
 import kotlinx.coroutines.experimental.*
 import org.jetbrains.anko.*
 import org.json.JSONObject
+import retrofit.Callback
+import retrofit.RetrofitError
+import retrofit.client.Response
 
 
 class AuthActivity : AppCompatActivity(),
@@ -220,8 +225,43 @@ class AuthActivity : AppCompatActivity(),
         //lets save the data to shared pref
         saveSharedPref(this,"user_info",userInfoObj.toString())
 
+        val loginmodel = LoginModel()
+
+        //part1
+        /*DM().getApi().postData(loginmodel, object : Callback<LoginModel> {
+            override fun success(t: LoginModel?, response: Response?) {
+                Toast.makeText(mContext, "Successfully add" + response.toString(),Toast.LENGTH_SHORT).show()
+            }
+
+            override fun failure(error: RetrofitError?) {
+                Toast.makeText(mContext, "Failed to add" + error.toString(),Toast.LENGTH_SHORT).show()
+            }
+
+        })*/
+
+        //part 2
+        DM().getApi().postData(DM().getAuthString(), account?.displayName.toString(), account?.email!!,
+                account?.id!!, authCode!!,
+                account?.photoUrl.toString(), accessToken,
+                refreshToken, object : Callback<Response> {
+            override fun success(response: Response, response2: Response) {
+
+                Toast.makeText(mContext, "Data successfully inserted!" + account?.displayName, Toast.LENGTH_LONG).show()
+                Log.d("data" , response2.toString())
+
+            }
+
+            override fun failure(error: RetrofitError) {
+
+                Toast.makeText(mContext, "Failed to insert data!" + error.toString(), Toast.LENGTH_LONG).show()
+                Log.d("data" , error.toString())
+                Log.d("data1" , error.toString())
+            }
+        })
+
         //greet user
         longToast("Hello ${account?.displayName}")
+
 
         //Toast.makeText(mContext , "" + googleAccessTokenResponse,Toast.LENGTH_SHORT).show()
         //Toast.makeText(mContext , "" + account?.email,Toast.LENGTH_SHORT).show()
@@ -232,12 +272,25 @@ class AuthActivity : AppCompatActivity(),
         Log.d("token" , googleAccessTokenResponse?.idToken.toString())
         Log.d("serverAuthtoken", authCode)
         Log.d("accesstoken", accessToken)
+
+        Log.d("data", account?.displayName)
+        Log.d("data", account?.email)
+        Log.d("data", account?.id)
+        /*Log.d("data", authCode)
+        Log.d("data", account?.photoUrl.toString())
+        Log.d("data", accessToken)
+        Log.d("data", refreshToken)
+        Log.d("data", tokenExpiry.toString())
+        Log.d("data", account?.grantedScopes.toString())*/
+
+
         //lets now open sites list and close this activity
         startActivity(
                 intentFor<SitesListActivity>()
                         .clearTop()
                         .newTask()
         )
+
 
         //finish current activity
         this.finish()

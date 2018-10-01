@@ -349,6 +349,7 @@ class SitesListActivity : DrawerActivity(),
             renderSitesListView(ProccessedSitesData)
         }//end run on ui thread
 
+
     }//end proccess site list
 
 
