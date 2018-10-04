@@ -10,14 +10,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.find
+import retrofit.Callback
+import retrofit.RetrofitError
+import retrofit.client.Response
 import java.net.URL
 import java.util.*
 import kotlin.concurrent.timerTask
@@ -168,6 +168,19 @@ open class SitesListAdapter(
             WMTools().deleteSite(activity,siteUrl )
 
             Log.e("Deleting","Deleting Site")
+
+            Log.e("delete"  , "" + siteUrl)
+
+            /*DM().getApi().deleteWebsite("free123216@gmail.com", siteUrl,object : Callback<Response> {
+                override fun success(response: Response, response2: Response) {
+                    Log.d("onsuccess", "delete website" + response)
+
+                }
+
+                override fun failure(error: RetrofitError) {
+                    Log.d("onfailed", "failed to delete website" + error)
+                }
+            })*/
 
         },this.pendingRemovalTimeout.toLong())
 

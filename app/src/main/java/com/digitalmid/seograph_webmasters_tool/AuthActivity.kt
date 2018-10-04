@@ -1,10 +1,13 @@
 package com.digitalmid.seograph_webmasters_tool
+
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.provider.Settings
 import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Window
 import android.widget.Toast
@@ -23,7 +26,10 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import kotlinx.android.synthetic.main.activity_auth.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.android.synthetic.main.add_site_dialog_layout.*
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.runBlocking
 import org.jetbrains.anko.*
 import org.json.JSONObject
 import retrofit.Callback
@@ -40,14 +46,15 @@ class AuthActivity : AppCompatActivity(),
 
     lateinit var dialog: ProgressDialog
 
-    lateinit var  googleApiClient: GoogleApiClient
+    lateinit var googleApiClient: GoogleApiClient
 
+    var unique_id: String? = null
     var mContext: Context
 
     //set access token to null
     var googleAccessTokenResponse: GoogleTokenResponse?
 
-    init{
+    init {
 
         //initialize variables
         mContext = this as Context
@@ -76,14 +83,14 @@ class AuthActivity : AppCompatActivity(),
         initGoogleLogin()
 
         //on click
-        signInBtn.setOnClickListener{ v ->
+        signInBtn.setOnClickListener { v ->
             signIn()
         }//end on Click
 
     }//end onCreate
 
     //init login
-    fun initGoogleLogin(){
+    fun initGoogleLogin() {
 
         val wmsScope = Scope("https://www.googleapis.com/auth/webmasters")
 
@@ -92,7 +99,7 @@ class AuthActivity : AppCompatActivity(),
 
         val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(
                 GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(wmsScope,plusPorfile)
+                .requestScopes(wmsScope, plusPorfile)
                 .requestId()
                 .requestEmail()
                 .requestServerAuthCode(googleAouth2WebClientId)
@@ -102,24 +109,25 @@ class AuthActivity : AppCompatActivity(),
 
         //var scopeTwo = ""
         //google api client
-        googleApiClient =  GoogleApiClient.Builder(this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+        googleApiClient = GoogleApiClient.Builder(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .addOnConnectionFailedListener(this)
                 .addConnectionCallbacks(this)
                 .build()
+
 
     }//end fun
 
     //on conneceted
     override fun onConnected(p0: Bundle?) {
-        Log.e("ON_CONNECTED","Connected")
+        Log.e("ON_CONNECTED", "Connected")
     }//end on connected
 
 
     //on connection failed listterner
     override fun onConnectionFailed(
             connResult: ConnectionResult
-    ){
+    ) {
         //login failed
         longToast(getString(R.string.login_failed))
     }//end connection failed listener
@@ -128,10 +136,10 @@ class AuthActivity : AppCompatActivity(),
     override fun onConnectionSuspended(i: Int) {}//end
 
     //sign in fun
-    fun signIn(){
+    fun signIn() {
 
         //googleApiClient is empty return
-        if(googleApiClient == null){
+        if (googleApiClient == null) {
             return
         }
 
@@ -146,8 +154,8 @@ class AuthActivity : AppCompatActivity(),
     //sign in results
     override fun onActivityResult(requestCode: Int,
                                   resultCode: Int,
-                                  data: Intent){
-        super.onActivityResult(requestCode,resultCode,data)
+                                  data: Intent) {
+        super.onActivityResult(requestCode, resultCode, data)
 
         //if our google signin
         if (requestCode == RC_SIGN_IN) {
@@ -162,12 +170,12 @@ class AuthActivity : AppCompatActivity(),
 
 
     //proccess signin result
-    fun proccessSignInResults(resultData: GoogleSignInResult): Boolean{
+    fun proccessSignInResults(resultData: GoogleSignInResult): Boolean {
 
         // Log.e("AUTH DATA",varDump(resultData))
 
         //lets check if it was success or failure
-        if(!resultData.isSuccess()){
+        if (!resultData.isSuccess()) {
             dialog.dismiss()
             longToast(R.string.login_failed)
             return false
@@ -177,9 +185,9 @@ class AuthActivity : AppCompatActivity(),
         val account: GoogleSignInAccount? = resultData.getSignInAccount()
 
         //server auth code
-        val authCode =  account?.serverAuthCode
+        val authCode = account?.serverAuthCode
 
-        Log.e("SERVER_AUTH_CODE",resultData.toString())
+        Log.e("SERVER_AUTH_CODE", resultData.toString())
 
         //fetch the access token
         fetchAccessTokenResponse(authCode)
@@ -188,7 +196,7 @@ class AuthActivity : AppCompatActivity(),
 
         //if the this.googleAccessTokenResponse is empty
         //then means we cant continue
-        if(googleAccessTokenResponse == null){
+        if (googleAccessTokenResponse == null) {
 
             //dismiss dialog
             dialog.dismiss()
@@ -198,6 +206,12 @@ class AuthActivity : AppCompatActivity(),
             //abort proccessing
             return false
         }//end if
+
+
+        if (googleAccessTokenResponse?.refreshToken == null) {
+            //longToast("Refresh Token ${googleAccessTokenResponse?.refreshToken.toString()}")
+
+        }
 
         //insert data
         var userInfoObj: JSONObject = JSONObject()
@@ -209,55 +223,106 @@ class AuthActivity : AppCompatActivity(),
         var tokenExpiry: Long = googleAccessTokenResponse?.expiresInSeconds!!.toLong()
 
         //insert data into json object
-        userInfoObj.put("display_name",account?.displayName)
-        userInfoObj.put("email",account?.email)
-        userInfoObj.put("user_id",account?.id)
-        userInfoObj.put("server_auth_code",authCode)
-        userInfoObj.put("profile_pic_url",account?.photoUrl)
-        userInfoObj.put("access_token",accessToken)
-        userInfoObj.put("refresh_token",refreshToken)
-        userInfoObj.put("token_expiry",tokenExpiry)
-        userInfoObj.put("id_token",googleAccessTokenResponse?.idToken)
-        userInfoObj.put("id_token",account?.grantedScopes)
+        userInfoObj.put("display_name", account?.displayName)
+        userInfoObj.put("email", account?.email)
+        userInfoObj.put("user_id", account?.id)
+        userInfoObj.put("server_auth_code", authCode)
+        userInfoObj.put("profile_pic_url", account?.photoUrl)
+        userInfoObj.put("access_token", accessToken)
+        userInfoObj.put("refresh_token", refreshToken)
+        userInfoObj.put("token_expiry", tokenExpiry)
+        userInfoObj.put("id_token", googleAccessTokenResponse?.idToken)
+        userInfoObj.put("id_token", account?.grantedScopes)
 
-        // Log.e("USER INFO", userInfoObj.toString())
+        Log.e("jsondata", userInfoObj.toString())
 
         //lets save the data to shared pref
-        saveSharedPref(this,"user_info",userInfoObj.toString())
+        saveSharedPref(this, "user_info", userInfoObj.toString())
 
-        val loginmodel = LoginModel()
+        unique_id = Settings.Secure.getString(applicationContext.contentResolver, Settings.Secure.ANDROID_ID)
 
-        //part1
-        /*DM().getApi().postData(loginmodel, object : Callback<LoginModel> {
-            override fun success(t: LoginModel?, response: Response?) {
-                Toast.makeText(mContext, "Successfully add" + response.toString(),Toast.LENGTH_SHORT).show()
+        Log.d("info", userInfoObj.toString())
+
+
+        /*val loginmodel = LoginModel()
+
+        loginmodel.userName = account?.displayName
+        loginmodel.email = account?.email
+        loginmodel.user_id = unique_id!!
+        loginmodel.authCode = authCode
+        //loginmodel.profilePicUrl = account?.photoUrl
+        loginmodel.accessToken = accessToken
+        loginmodel.refreshToken = refreshToken
+        loginmodel.tokenExpiry = tokenExpiry.toString()
+        loginmodel.googleAccessTokenResponse = googleAccessTokenResponse?.idToken
+        loginmodel.grantScope = account?.grantedScopes.toString()
+
+
+        DM().getApi().postData("none",
+                account?.displayName!!,
+                account?.email!!,
+                unique_id.toString(),
+                authCode!!,
+                googleAccessTokenResponse?.idToken.toString(),
+                accessToken,
+                refreshToken,
+                tokenExpiry.toString(),
+                userInfoObj.toString(),
+                object : Callback<Response> {
+            override fun success(t: Response?, response: Response?) {
+               Toast.makeText(mContext, "Successfully add data",Toast.LENGTH_SHORT).show()
             }
 
             override fun failure(error: RetrofitError?) {
-                Toast.makeText(mContext, "Failed to add" + error.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(mContext,"Failed to upload" ,Toast.LENGTH_SHORT).show()
             }
 
         })*/
 
-        //part 2
-        DM().getApi().postData(DM().getAuthString(), account?.displayName.toString(), account?.email!!,
-                account?.id!!, authCode!!,
-                account?.photoUrl.toString(), accessToken,
-                refreshToken, object : Callback<Response> {
-            override fun success(response: Response, response2: Response) {
 
-                Toast.makeText(mContext, "Data successfully inserted!" + account?.displayName, Toast.LENGTH_LONG).show()
-                Log.d("data" , response2.toString())
+        /*DM().getApi().postData(account?.displayName!!,
+                account?.displayName!!,
+                account?.email!!,
+                unique_id.toString(),
+                authCode!!,
+                googleAccessTokenResponse?.idToken!!,
+                accessToken,
+                refreshToken,
+                tokenExpiry.toString(),
+                userInfoObj.toString(),
+                object : Callback<Response> {
+                    override fun success(response: Response, response2: Response) {
+                        Toast.makeText(mContext, "Successfully add data", Toast.LENGTH_SHORT).show()
+                        Log.d("onsuccess", "" + account?.displayName)
+                        Log.d("onsuccess", "" + account?.email)
+                        Log.d("onsuccess", "" + account?.id)
+                        Log.d("onsuccess", "" + authCode)
+                        Log.d("onsuccess", "" + account?.photoUrl)
+                        Log.d("onsuccess", "" + accessToken)
+                        Log.d("onsuccess", "" + refreshToken)
+                        Log.d("onsuccess", "" + tokenExpiry)
+                        Log.d("onsuccess", "" + googleAccessTokenResponse?.idToken)
+                        Log.d("onsuccess", "" + userInfoObj.toString())
+                    }
 
-            }
+                    override fun failure(error: RetrofitError) {
+                        Toast.makeText(mContext, "Failed to update" + error.message, Toast.LENGTH_SHORT).show()
+                        Log.d("onfailed", "" + error.toString())
+                    }
+                })*/
 
-            override fun failure(error: RetrofitError) {
 
-                Toast.makeText(mContext, "Failed to insert data!" + error.toString(), Toast.LENGTH_LONG).show()
-                Log.d("data" , error.toString())
-                Log.d("data1" , error.toString())
-            }
-        })
+        Log.d("data", "googleIdtoken :" + googleAccessTokenResponse?.idToken.toString())
+        Log.d("data", "authcode :" + authCode)
+        Log.d("data", "accesstoken :" + accessToken)
+        Log.d("data", "refreshtoken :" + refreshToken)
+        Log.d("data", "name :" + account?.displayName)
+        Log.d("data", "email :" + account?.email)
+        Log.d("data", "accountID :" + account?.id)
+        Log.d("data", "authcode :" + authCode)
+        Log.d("data", "url :" + account?.photoUrl.toString())
+        Log.d("data", "tokenexpiry :" + tokenExpiry.toString())
+        Log.d("data", "device id :" + unique_id)
 
         //greet user
         longToast("Hello ${account?.displayName}")
@@ -269,20 +334,10 @@ class AuthActivity : AppCompatActivity(),
         //dismiss dialog
         dialog.dismiss()
 
-        Log.d("token" , googleAccessTokenResponse?.idToken.toString())
-        Log.d("serverAuthtoken", authCode)
-        Log.d("accesstoken", accessToken)
 
-        Log.d("data", account?.displayName)
-        Log.d("data", account?.email)
-        Log.d("data", account?.id)
-        /*Log.d("data", authCode)
-        Log.d("data", account?.photoUrl.toString())
-        Log.d("data", accessToken)
-        Log.d("data", refreshToken)
-        Log.d("data", tokenExpiry.toString())
-        Log.d("data", account?.grantedScopes.toString())*/
-
+        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val editor = preferences.edit()
+        editor.putString("googledata", account?.email)
 
         //lets now open sites list and close this activity
         startActivity(
@@ -299,13 +354,15 @@ class AuthActivity : AppCompatActivity(),
         return true
     }//end proccess signin data
 
+
     /**
      * setAccessToken
      */
-    fun setAccessTokenResponse(accessTokenResponse: GoogleTokenResponse){
+    fun setAccessTokenResponse(accessTokenResponse: GoogleTokenResponse) {
 
         //set access token response
         googleAccessTokenResponse = accessTokenResponse
+
 
     }//end set accessTokenResponse
 
@@ -314,7 +371,7 @@ class AuthActivity : AppCompatActivity(),
      *  @param accountName
      *  @param scopes
      */
-    fun fetchAccessTokenResponse(serverAuthCode: String?){
+    fun fetchAccessTokenResponse(serverAuthCode: String?) {
 
         val endpoint = "https://www.googleapis.com/oauth2/v4/token"
         val redirectUri = ""
@@ -353,3 +410,4 @@ class AuthActivity : AppCompatActivity(),
     }//end get AccessToken
 
 }//end class
+

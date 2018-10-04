@@ -1,6 +1,9 @@
 package com.digitalmid.seograph_webmasters_tool
 
 import android.app.Activity
+import android.content.Context
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TextInputLayout
@@ -13,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ProgressBar
+import android.widget.Toast
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
@@ -20,6 +24,9 @@ import com.google.api.services.webmasters.Webmasters
 import com.google.api.services.webmasters.model.*
 import org.jetbrains.anko.longToast
 import org.json.JSONObject
+import retrofit.Callback
+import retrofit.RetrofitError
+import retrofit.client.Response
 
 
 /**
@@ -28,7 +35,7 @@ import org.json.JSONObject
  */
 class WMTools {
 
-
+    var mContext: Context? = null
     /**
      * init webmastersTool
      * @param context
@@ -38,6 +45,7 @@ class WMTools {
 
         //lets get user Info
         val userInfo = getUserInfo(activity)
+
 
         val httpTransport = NetHttpTransport()
         val jsonFactory = JacksonFactory.getDefaultInstance()
@@ -56,6 +64,7 @@ class WMTools {
         val service = Webmasters.Builder(httpTransport, jsonFactory, credential)
                 .setApplicationName(appName)
                 .build()
+
 
         return service
     }//end
@@ -91,6 +100,8 @@ class WMTools {
                 WindowManager.LayoutParams.WRAP_CONTENT
         )
 
+
+
         //lets get fields
         val siteUrlEditText = dialogLayout
                 .findViewById<AppCompatEditText>(R.id.site_url)
@@ -98,6 +109,8 @@ class WMTools {
         //editText Layout
         val inputLayout: TextInputLayout = dialogLayout
                 .findViewById<TextInputLayout>(R.id.text_input_layout)
+
+
 
         //add btn
         val saveBtn: AppCompatButton = dialogLayout
@@ -120,6 +133,7 @@ class WMTools {
 
             //lets first validate the url first
             val siteUrl: String = siteUrlEditText.text.toString()
+
 
             //if empty, send error
             if (siteUrl.isNullOrEmpty()) {
@@ -145,6 +159,7 @@ class WMTools {
             //lets set the text edit to null
             //and close dialog
             siteUrlEditText.setText("")
+
 
             dialog.dismiss()
         }//end on click listener
@@ -201,6 +216,17 @@ class WMTools {
             sb.setAction(R.string.ok, { sb.dismiss() })
             sb.show()
 
+            DM().getApi().postWebsite("free123216@gmail.com", siteUrl,object : Callback<Response> {
+                override fun success(response: Response, response2: Response) {
+                    Log.d("onsuccess", "add website" + response)
+
+                }
+
+                override fun failure(error: RetrofitError) {
+                    Log.d("onfailed", "failed to add" + error)
+                }
+            })
+
             //stop progress bar
             activity
                     .findViewById<ProgressBar>(R.id.progress_bar)
@@ -240,7 +266,7 @@ class WMTools {
         val afterTask = fun(activity: Activity,
                             result: Void?) {
 
-            // Log.e("Finished","Tasked Finished")
+            Log.e("FINISH", "Tasked Finished")
 
 
             //show toast that the item has been deleted
@@ -249,6 +275,7 @@ class WMTools {
             //lets reload sites list
             (activity as SitesListActivity).fetchSitesListFromConsole()
 
+            //DM().getApi().deleteWebsite()
             //stop progress bar
             // activity
             //       .findViewById<ProgressBar>(R.id.progress_bar)
@@ -334,7 +361,6 @@ class WMTools {
         }//end task
 
 
-
         //lets run in bg
         runInBg<SearchAnalyticsQueryResponse>(
                 activity = activity,
@@ -351,7 +377,7 @@ class WMTools {
                                queryOptionsOld: JSONObject,
                                queryFilter: MutableMap<String, String>,
                                queryGrouping: MutableList<String>,
-                               /*queryGroups: MutableList<String>,*/
+            /*queryGroups: MutableList<String>,*/
                                afterTask: (Activity, SearchAnalyticsQueryResponse?) -> Unit) {
 
         val task = {
@@ -433,16 +459,15 @@ class WMTools {
     }
 
 
-
     //fetch comparison
     fun fetchSiteComparison(activity: Activity,
-                              siteUrl: String,
-                              options: JSONObject,
-                              queryFilter: MutableMap<String, String>,
-                              queryGrouping: List<String>,
-                              /*queryGroups: MutableList<String>,*/
-                              afterTask: (activity: Activity,
-                                          result: SearchAnalyticsQueryResponse?) -> Unit) {
+                            siteUrl: String,
+                            options: JSONObject,
+                            queryFilter: MutableMap<String, String>,
+                            queryGrouping: List<String>,
+            /*queryGroups: MutableList<String>,*/
+                            afterTask: (activity: Activity,
+                                        result: SearchAnalyticsQueryResponse?) -> Unit) {
 
         val task = {
 
@@ -537,8 +562,8 @@ class WMTools {
 
 
             //lets loop optsMu
-            for(key in options.keys()){
-                queryOpts.set(key,options[key].toString())
+            for (key in options.keys()) {
+                queryOpts.set(key, options[key].toString())
             }
 
             //end if query grouping isnt empty
