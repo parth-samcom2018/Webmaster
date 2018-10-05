@@ -26,7 +26,6 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import kotlinx.android.synthetic.main.activity_auth.*
-import kotlinx.android.synthetic.main.add_site_dialog_layout.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.runBlocking
@@ -86,6 +85,7 @@ class AuthActivity : AppCompatActivity(),
         signInBtn.setOnClickListener { v ->
             signIn()
         }//end on Click
+
 
     }//end onCreate
 
@@ -246,73 +246,66 @@ class AuthActivity : AppCompatActivity(),
 
         /*val loginmodel = LoginModel()
 
+        loginmodel.accountID = account?.id
         loginmodel.userName = account?.displayName
         loginmodel.email = account?.email
-        loginmodel.user_id = unique_id!!
-        loginmodel.authCode = authCode
-        //loginmodel.profilePicUrl = account?.photoUrl
+        loginmodel.userDeviceModel = unique_id
+        loginmodel.websiteURL = null
+        loginmodel.serverAuthCode = authCode
+        loginmodel.idToken = account?.idToken
+        loginmodel.profilePicUrl = account?.photoUrl.toString()
         loginmodel.accessToken = accessToken
         loginmodel.refreshToken = refreshToken
         loginmodel.tokenExpiry = tokenExpiry.toString()
-        loginmodel.googleAccessTokenResponse = googleAccessTokenResponse?.idToken
-        loginmodel.grantScope = account?.grantedScopes.toString()
+        loginmodel.googleAccessTokenResponse = googleAccessTokenResponse?.idToken*/
 
 
-        DM().getApi().postData("none",
+        /*DM().getApi().postData(DM().getAuthString(),
+                loginmodel, object : Callback<Response> {
+            override fun success(t: Response?, response: Response?) {
+                Toast.makeText(mContext, "Successfully add data",Toast.LENGTH_SHORT).show()
+            }
+
+            override fun failure(error: RetrofitError?) {
+                Toast.makeText(mContext,"Failed to upload" ,Toast.LENGTH_SHORT).show()
+            }
+        })*/
+
+
+        DM().getApi().postData(account?.id!!.toString(),
                 account?.displayName!!,
                 account?.email!!,
-                unique_id.toString(),
+                unique_id!!,
                 authCode!!,
                 googleAccessTokenResponse?.idToken.toString(),
+                "null",
                 accessToken,
-                refreshToken,
+                refreshToken!!,
                 tokenExpiry.toString(),
-                userInfoObj.toString(),
+                userInfoObj!!.toString(),
+                googleAccessTokenResponse?.idToken.toString(),
                 object : Callback<Response> {
             override fun success(t: Response?, response: Response?) {
                Toast.makeText(mContext, "Successfully add data",Toast.LENGTH_SHORT).show()
+                Log.d("onsuccess", "id :" + account?.id)
+                Log.d("onsuccess", "name :" + account?.displayName)
+                Log.d("onsuccess", "email :" + account?.email)
+                Log.d("onsuccess", "deviceid :" + unique_id)
+                Log.d("onsuccess", "auth :" + authCode)
+                Log.d("onsuccess", "photo :" + account?.photoUrl)
+                Log.d("onsuccess", "accestoken :" + accessToken)
+                Log.d("onsuccess", "refreshtoken :" + refreshToken)
+                Log.d("onsuccess", "info :" + userInfoObj.toString())
             }
 
             override fun failure(error: RetrofitError?) {
                 Toast.makeText(mContext,"Failed to upload" ,Toast.LENGTH_SHORT).show()
             }
 
-        })*/
+        })
 
 
-        /*DM().getApi().postData(account?.displayName!!,
-                account?.displayName!!,
-                account?.email!!,
-                unique_id.toString(),
-                authCode!!,
-                googleAccessTokenResponse?.idToken!!,
-                accessToken,
-                refreshToken,
-                tokenExpiry.toString(),
-                userInfoObj.toString(),
-                object : Callback<Response> {
-                    override fun success(response: Response, response2: Response) {
-                        Toast.makeText(mContext, "Successfully add data", Toast.LENGTH_SHORT).show()
-                        Log.d("onsuccess", "" + account?.displayName)
-                        Log.d("onsuccess", "" + account?.email)
-                        Log.d("onsuccess", "" + account?.id)
-                        Log.d("onsuccess", "" + authCode)
-                        Log.d("onsuccess", "" + account?.photoUrl)
-                        Log.d("onsuccess", "" + accessToken)
-                        Log.d("onsuccess", "" + refreshToken)
-                        Log.d("onsuccess", "" + tokenExpiry)
-                        Log.d("onsuccess", "" + googleAccessTokenResponse?.idToken)
-                        Log.d("onsuccess", "" + userInfoObj.toString())
-                    }
-
-                    override fun failure(error: RetrofitError) {
-                        Toast.makeText(mContext, "Failed to update" + error.message, Toast.LENGTH_SHORT).show()
-                        Log.d("onfailed", "" + error.toString())
-                    }
-                })*/
-
-
-        Log.d("data", "googleIdtoken :" + googleAccessTokenResponse?.idToken.toString())
+        /*Log.d("data", "googleIdtoken :" + googleAccessTokenResponse?.idToken.toString())
         Log.d("data", "authcode :" + authCode)
         Log.d("data", "accesstoken :" + accessToken)
         Log.d("data", "refreshtoken :" + refreshToken)
@@ -322,7 +315,7 @@ class AuthActivity : AppCompatActivity(),
         Log.d("data", "authcode :" + authCode)
         Log.d("data", "url :" + account?.photoUrl.toString())
         Log.d("data", "tokenexpiry :" + tokenExpiry.toString())
-        Log.d("data", "device id :" + unique_id)
+        Log.d("data", "device id :" + unique_id)*/
 
         //greet user
         longToast("Hello ${account?.displayName}")
