@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.digitalmid.seograph_webmasters_tool.R
+import com.digitalmid.seograph_webmasters_tool.getDateTime
 import com.google.api.services.webmasters.model.ApiDataRow
-import java.lang.NullPointerException
 
 
 class CompareAdapter(val dataList: FragmentActivity, val items: MutableList<ApiDataRow>) : RecyclerView.Adapter<CompareAdapter.ViewHolder>() {
@@ -39,7 +39,6 @@ class CompareAdapter(val dataList: FragmentActivity, val items: MutableList<ApiD
         holder.bindItems(items[position])
 
 
-
     }
 
 
@@ -66,7 +65,6 @@ class CompareAdapter(val dataList: FragmentActivity, val items: MutableList<ApiD
             textClicks.text = user.clicks.toString()
 
 
-
             //val textctr = itemView.findViewById<TextView>(R.id.tvCtr)
             //val textImpression = itemView.findViewById<TextView>(R.id.tvImpression)
 
@@ -86,7 +84,9 @@ class CompareAdapter(val dataList: FragmentActivity, val items: MutableList<ApiD
 
 
             try {
-                textKeys?.text = user.getKeys().toString().replace("[","").replace("]","");
+                //textKeys?.text = user.getKeys().toString().replace("[","").replace("]","");
+                textKeys.text = user.keys.toString().getDateTime()
+
             } catch (e: NullPointerException) {
                 e.printStackTrace()
             }

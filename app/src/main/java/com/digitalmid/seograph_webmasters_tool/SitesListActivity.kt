@@ -26,6 +26,7 @@ import org.jetbrains.anko.doAsync
 import org.json.JSONArray
 import android.content.SharedPreferences
 import android.widget.Toast
+import kotlinx.android.synthetic.main.add_site_dialog_layout.*
 
 
 class SitesListActivity : DrawerActivity(),
@@ -368,7 +369,6 @@ class SitesListActivity : DrawerActivity(),
         hideResfreshSpinner()
 
         Log.d("siteList", sitesListData.toString())
-
 
     }//end render sitesList
 

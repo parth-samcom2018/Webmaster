@@ -216,7 +216,8 @@ class WMTools {
             sb.setAction(R.string.ok, { sb.dismiss() })
             sb.show()
 
-            DM().getApi().postWebsite("free123216@gmail.com", siteUrl,object : Callback<Response> {
+
+           /* DM().getApi().postWebsite("free123216@gmail.com", siteUrl,object : Callback<Response> {
                 override fun success(response: Response, response2: Response) {
                     Log.d("onsuccess", "add website" + response)
 
@@ -225,7 +226,7 @@ class WMTools {
                 override fun failure(error: RetrofitError) {
                     Log.d("onfailed", "failed to add" + error)
                 }
-            })
+            })*/
 
             //stop progress bar
             activity

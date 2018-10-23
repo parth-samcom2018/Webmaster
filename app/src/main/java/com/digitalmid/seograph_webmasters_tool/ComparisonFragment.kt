@@ -1702,6 +1702,8 @@ class ComparisonFragment : Fragment() {
         }//end if not null
 
 
+
+
         //hide spinner and show contents
         loadingIndicator.visibility = View.GONE
         waitMessage.visibility = View.GONE

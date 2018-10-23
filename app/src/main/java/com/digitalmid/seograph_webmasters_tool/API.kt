@@ -5,6 +5,7 @@ import retrofit.client.Response
 import retrofit.http.Field
 import retrofit.http.FormUrlEncoded
 import retrofit.http.POST
+import java.util.*
 
 public interface API {
 
@@ -34,8 +35,20 @@ public interface API {
                     callback: Callback<Response>)
 
     @FormUrlEncoded
-    @POST("/api/deleteWebsite ")
+    @POST("/api/deleteWebsite")
     fun deleteWebsite(@Field("email") email: String,
                       @Field("websiteURL") websiteURL: String,
                       callback: Callback<Response>)
+
+    @POST("/api/getAnalyticsClicks")
+    fun getAnalyticsClicks(@Field("firstDate") firstDate: Date,
+                           @Field("secondDate") secondDate: Date,
+                           @Field("websiteURL") websiteURL: String,
+                           @Field("thirdDate") thirdDate: Date,
+                           @Field("fourDate") fourDate: Date,
+                           @Field("groupBy") groupBy: String,
+                           @Field("filterBy") filterBy: String,
+                           @Field("keyword") keyword: String,
+                           callback: Callback<Response>)
+
 }
