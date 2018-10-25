@@ -26,12 +26,14 @@ import org.jetbrains.anko.doAsync
 import org.json.JSONArray
 import android.content.SharedPreferences
 import android.widget.Toast
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.add_site_dialog_layout.*
 
 
 class SitesListActivity : DrawerActivity(),
         SearchView.OnQueryTextListener {
 
+    private val TAG = "Sitelist"
 
     //swipe Container
     private val swipeContainer: SwipeRefreshLayout by lazy {
@@ -58,6 +60,14 @@ class SitesListActivity : DrawerActivity(),
         //because the DrawerActivity dont call the setContenView method
         super.onCreate(savedInstanceState)
 
+        var token = FirebaseInstanceId.getInstance().token
+        Log.d(TAG,"Token : "+token)
+        var bodyMessage= intent.getStringExtra("Notification")
+        if(bodyMessage != null){
+            body_text_view.text = bodyMessage
+
+            Log.d(TAG, "token: " + token)
+        }
 
         //lets register the add site dialog
         val addSiteDialog = WMTools().addSiteDialog(this)

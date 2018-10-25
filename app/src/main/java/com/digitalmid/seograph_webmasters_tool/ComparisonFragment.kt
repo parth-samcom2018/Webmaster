@@ -33,6 +33,9 @@ import com.google.api.services.webmasters.model.ApiDataRow
 import com.google.api.services.webmasters.model.SearchAnalyticsQueryResponse
 import kotlinx.android.synthetic.main.fragment_comparison.*
 import org.json.JSONObject
+import retrofit.Callback
+import retrofit.RetrofitError
+import retrofit.client.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -49,6 +52,7 @@ class ComparisonFragment : Fragment() {
     var count: Int = 0
 
     var adView: AdView? = null
+    //var analyticsModel: AnalyticsModel? = null
 
     // Recycler view
     var rcView: RecyclerView? = null
@@ -325,6 +329,28 @@ class ComparisonFragment : Fragment() {
         /*statDateViewOld.setOnClickListener {
             statsDateDialogOld.show()
         }*/
+
+
+        /*DM().getApi().getAnalyticsClicks("2018-10-15",
+                "2018-10-22",
+                siteUrl,
+                startDateOld!!.time.toString(),
+                endDateOld!!.time.toString(),
+                "date",
+                "",
+                "",
+                object : Callback<Response> {
+                    override fun success(t: Response?, response: Response?) {
+                        Toast.makeText(mContext, "Successfully Show data",Toast.LENGTH_SHORT).show()
+                        Log.d("onsuccess", "id :" + response.toString())
+
+                    }
+
+                    override fun failure(error: RetrofitError?) {
+                        Toast.makeText(mContext,"Failed to upload" ,Toast.LENGTH_SHORT).show()
+                    }
+
+                })*/
 
         return fragView
     }
@@ -1704,6 +1730,7 @@ class ComparisonFragment : Fragment() {
 
 
 
+
         //hide spinner and show contents
         loadingIndicator.visibility = View.GONE
         waitMessage.visibility = View.GONE
@@ -1721,16 +1748,6 @@ class ComparisonFragment : Fragment() {
         rcView?.adapter = adapter1
         adapter1?.notifyDataSetChanged()
 
-        //change
-        /*rcViewChange = contentsView.findViewById<RecyclerView>(R.id.recyclerView_change)
-        rcViewChange!!.layoutManager = LinearLayoutManager(this!!.getActivity(), LinearLayout.VERTICAL, false)
-        //adapter1 = CustomAdapter(getActivity(), results?.rows)
-        adapterChange = ChangeAdapter(getActivity(), results?.rows)
-
-        rcViewChange?.adapter = adapterChange
-        adapterChange?.notifyDataSetChanged()*/
-
-        change()
 
 
         rcView?.setOnTouchListener(object : View.OnTouchListener {
@@ -1768,7 +1785,7 @@ class ComparisonFragment : Fragment() {
 
     }//end fun
 
-    fun change() {
+    /*fun change() {
         rcViewChange = fragView.findViewById(R.id.recyclerView_change)
         rcViewChange!!.layoutManager = LinearLayoutManager(this!!.getActivity(), LinearLayout.VERTICAL, false)
         //adapter1 = CustomAdapter(getActivity(), results?.rows)
@@ -1776,7 +1793,7 @@ class ComparisonFragment : Fragment() {
 
         rcViewChange?.adapter = adapterChange
         adapterChange?.notifyDataSetChanged()
-    }
+    }*/
 
 
     private fun showInterstitial() {
@@ -3363,6 +3380,7 @@ class ComparisonFragment : Fragment() {
 
                     //clear current groupings
                     queryGrouping.clear()
+
 
                     //always add date
                     //queryGrouping.add("date")

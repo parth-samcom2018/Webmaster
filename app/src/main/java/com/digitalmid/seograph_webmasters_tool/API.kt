@@ -40,12 +40,13 @@ public interface API {
                       @Field("websiteURL") websiteURL: String,
                       callback: Callback<Response>)
 
+
     @POST("/api/getAnalyticsClicks")
-    fun getAnalyticsClicks(@Field("firstDate") firstDate: Date,
-                           @Field("secondDate") secondDate: Date,
+    fun getAnalyticsClicks(@Field("firstDate") firstDate: String,
+                           @Field("secondDate") secondDate: String,
                            @Field("websiteURL") websiteURL: String,
-                           @Field("thirdDate") thirdDate: Date,
-                           @Field("fourDate") fourDate: Date,
+                           @Field("thirdDate") thirdDate: String,
+                           @Field("fourDate") fourDate: String,
                            @Field("groupBy") groupBy: String,
                            @Field("filterBy") filterBy: String,
                            @Field("keyword") keyword: String,

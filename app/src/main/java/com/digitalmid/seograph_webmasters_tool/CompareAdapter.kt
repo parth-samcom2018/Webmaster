@@ -84,8 +84,7 @@ class CompareAdapter(val dataList: FragmentActivity, val items: MutableList<ApiD
 
 
             try {
-                //textKeys?.text = user.getKeys().toString().replace("[","").replace("]","");
-                textKeys.text = user.keys.toString().getDateTime()
+                textKeys?.text = user.getKeys().toString().replace("[","").replace("]","");
 
             } catch (e: NullPointerException) {
                 e.printStackTrace()
