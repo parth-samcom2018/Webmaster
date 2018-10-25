@@ -216,17 +216,25 @@ class WMTools {
             sb.setAction(R.string.ok, { sb.dismiss() })
             sb.show()
 
+            val userInfo = getUserInfo(activity)
 
-           /* DM().getApi().postWebsite("free123216@gmail.com", siteUrl,object : Callback<Response> {
-                override fun success(response: Response, response2: Response) {
-                    Log.d("onsuccess", "add website" + response)
 
-                }
+            if (userInfo!=null) {
+                val userEmail = userInfo.getString("email")
+                Log.d("user", "email : " + userEmail)
 
-                override fun failure(error: RetrofitError) {
-                    Log.d("onfailed", "failed to add" + error)
-                }
-            })*/
+                DM().getApi().postWebsite(userEmail, siteUrl,object : Callback<Response> {
+                    override fun success(response: Response, response2: Response) {
+                        Log.d("onsuccess", "add website" + response)
+                    }
+
+                    override fun failure(error: RetrofitError) {
+                        Log.d("onfailed", "failed to add" + error)
+                    }
+                })
+            }
+
+
 
             //stop progress bar
             activity
@@ -275,6 +283,23 @@ class WMTools {
 
             //lets reload sites list
             (activity as SitesListActivity).fetchSitesListFromConsole()
+
+            val userInfo = getUserInfo(activity)
+
+            if (userInfo!=null) {
+                val userEmail = userInfo.getString("email")
+                Log.d("delete", "site : " + siteUrl)
+
+                DM().getApi().deleteWebsite(userEmail, siteUrl,object : Callback<Response> {
+                    override fun success(response: Response, response2: Response) {
+                        Log.d("delete", "add website" + response)
+                    }
+
+                    override fun failure(error: RetrofitError) {
+                        Log.d("onfailed", "failed to add" + error)
+                    }
+                })
+            }
 
             //DM().getApi().deleteWebsite()
             //stop progress bar

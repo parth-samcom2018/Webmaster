@@ -48,8 +48,6 @@ public interface API {
                            @Field("thirdDate") thirdDate: String,
                            @Field("fourDate") fourDate: String,
                            @Field("groupBy") groupBy: String,
-                           @Field("filterBy") filterBy: String,
-                           @Field("keyword") keyword: String,
                            callback: Callback<Response>)
 
 }

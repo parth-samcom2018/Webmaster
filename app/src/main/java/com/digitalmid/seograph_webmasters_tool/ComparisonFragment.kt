@@ -331,26 +331,6 @@ class ComparisonFragment : Fragment() {
         }*/
 
 
-        /*DM().getApi().getAnalyticsClicks("2018-10-15",
-                "2018-10-22",
-                siteUrl,
-                startDateOld!!.time.toString(),
-                endDateOld!!.time.toString(),
-                "date",
-                "",
-                "",
-                object : Callback<Response> {
-                    override fun success(t: Response?, response: Response?) {
-                        Toast.makeText(mContext, "Successfully Show data",Toast.LENGTH_SHORT).show()
-                        Log.d("onsuccess", "id :" + response.toString())
-
-                    }
-
-                    override fun failure(error: RetrofitError?) {
-                        Toast.makeText(mContext,"Failed to upload" ,Toast.LENGTH_SHORT).show()
-                    }
-
-                })*/
 
         return fragView
     }
@@ -1339,6 +1319,32 @@ class ComparisonFragment : Fragment() {
 
         rcViewOld?.adapter = adapterOld
         adapterOld?.notifyDataSetChanged()
+
+        Log.d(TAG, "startdate : " + startDate.time.toString())
+        Log.d(TAG, "endDate : " + endDate.time.toString())
+        Log.d(TAG, "url : " + siteUrl)
+        Log.d(TAG, "startdate : " + startDateOld.time.toString())
+        Log.d(TAG, "endDate : " + endDateOld.time.toString())
+        Log.d(TAG, "query : " + queryGrouping.toString().replace("[","").replace("]",""))
+
+
+        /*DM().getApi().getAnalyticsClicks(startDate.time.toString()!!,
+                endDate.time.toString(),
+                siteUrl,
+                startDateOld!!.time.toString(),
+                endDateOld!!.time.toString(),
+                queryGrouping.toString().replace("[","").replace("]",""),
+                object : Callback<Response> {
+                    override fun success(t: Response?, response: Response?) {
+                        Toast.makeText(mContext, "Successfully add data",Toast.LENGTH_SHORT).show()
+
+                    }
+
+                    override fun failure(error: RetrofitError?) {
+                        Toast.makeText(mContext,"Failed to upload" ,Toast.LENGTH_SHORT).show()
+                    }
+
+                })*/
 
 
 
