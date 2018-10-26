@@ -6,8 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.digitalmid.seograph_webmasters_tool.DM
 import com.digitalmid.seograph_webmasters_tool.R
 import com.google.api.services.webmasters.model.ApiDataRow
+import retrofit.client.Response
+import javax.security.auth.callback.Callback
 
 class CompareOldAdapter(val dataList: FragmentActivity, val items: MutableList<ApiDataRow>) : RecyclerView.Adapter<CompareOldAdapter.ViewHolder>() {
 
@@ -20,6 +23,7 @@ class CompareOldAdapter(val dataList: FragmentActivity, val items: MutableList<A
     //this method is binding the data on the list
     override fun onBindViewHolder(holder: CompareOldAdapter.ViewHolder, position: Int) {
         holder.bindItems(items[position])
+
 
     }
 
@@ -34,10 +38,13 @@ class CompareOldAdapter(val dataList: FragmentActivity, val items: MutableList<A
         fun bindItems(user: ApiDataRow) {
             val textClicks = itemView.findViewById<TextView>(R.id.tvClicks)
             val textKeys = itemView.findViewById<TextView>(R.id.tvKeys)
+            val tv_change = itemView.findViewById<TextView>(R.id.tv_change)
 
 
             // show data
             textClicks.text = user.clicks.toString()
+            tv_change.text = user.clicks.toString()
+
 
             try {
                 textKeys?.text = user.getKeys().toString().replace("[", "").replace("]", "");

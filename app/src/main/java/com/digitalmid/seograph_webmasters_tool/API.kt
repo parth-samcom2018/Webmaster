@@ -49,7 +49,7 @@ public interface API {
                            @Field("fourDate") fourDate: String,
                            @Field("groupBy") groupBy: String,
                            @Field("keyword") keyword: String,
-                           callback: Callback<Response>)
+                           callback: Any)
 
 
 }

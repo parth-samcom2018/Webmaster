@@ -230,7 +230,7 @@ class AnalyticsFragment : Fragment() {
     /**
      * initDatePickerDialog
      */
-    fun showDatePickerDialog(inputField: TextInputEditText) {
+    fun  showDatePickerDialog(inputField: TextInputEditText) {
 
         //lets create date
         var now = Calendar.getInstance()

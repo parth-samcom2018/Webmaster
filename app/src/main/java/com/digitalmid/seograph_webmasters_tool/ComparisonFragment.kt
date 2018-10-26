@@ -331,7 +331,7 @@ class ComparisonFragment : Fragment() {
         return fragView
     }
 
-    /*fun showDatePickerDialogOld(inputField: TextInputEditText) {
+    fun showDatePickerDialogOld(inputField: TextInputEditText) {
         //lets create date
         var now = Calendar.getInstance()
 
@@ -360,7 +360,7 @@ class ComparisonFragment : Fragment() {
 
         //show date picker
         picker.show()
-    }*/
+    }
 
 
     /**
@@ -438,7 +438,7 @@ class ComparisonFragment : Fragment() {
 
     }//end fun
 
-    /*fun initStatsDateDialogOld(): AppCompatDialog {
+    fun initStatsDateDialogOld(): AppCompatDialog {
         //before anything goes on, lets save the old
         //start date and end date, so that when the action
         //is cancelled , we revert if any changes were made
@@ -697,7 +697,7 @@ class ComparisonFragment : Fragment() {
         }//end event Listener
 
         return dialog
-    }*/
+    }
 
     /**
      *statDateDialog
@@ -1283,7 +1283,6 @@ class ComparisonFragment : Fragment() {
 
         }
 
-
         Log.d(TAG, "startdate : " + startDate.time.toString())
         Log.d(TAG, "endDate : " + endDate.time.toString())
         Log.d(TAG, "url : " + siteUrl)
@@ -1309,7 +1308,6 @@ class ComparisonFragment : Fragment() {
 
         rcViewOld?.adapter = adapterOld
         adapterOld?.notifyDataSetChanged()
-
 
 
         rcViewOld?.setOnTouchListener(object : View.OnTouchListener {
@@ -1345,6 +1343,7 @@ class ComparisonFragment : Fragment() {
         })
 
     }
+
 
     /*private fun getdata(): MutableList<AnalyticsModel> {
         val cb = object : Callback<AnalyticsRes> {
@@ -3097,7 +3096,7 @@ class ComparisonFragment : Fragment() {
         val dialog = AppCompatDialog(mContext)
 
         //set the view
-        dialog.setContentView(R.layout.filter_analytics_dialog)
+        dialog.setContentView(R.layout.filter_compare_dialog)
 
         //set window width to fit
         dialog!!.window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
