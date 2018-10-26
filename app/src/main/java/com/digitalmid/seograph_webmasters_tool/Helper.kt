@@ -35,7 +35,7 @@ import java.util.regex.Matcher
  * @param context  Context: the App Context
  * @param itemName String : the key of the item we wish to retrieve
  */
-fun getSharedPref(context: Context, itemName: String?): Any?{
+fun getSharedPref(context: Context, itemName: String?): Any? {
 
     //get the preference
     val sharedPrefConn = context.getSharedPreferences(sharedPrefDBName, Context.MODE_PRIVATE)
@@ -45,7 +45,7 @@ fun getSharedPref(context: Context, itemName: String?): Any?{
     val dbDataSet = sharedPrefConn.all
 
     //if null or empty, we send all the db data
-    if(itemName.isNullOrEmpty()){
+    if (itemName.isNullOrEmpty()) {
         return dbDataSet
     }//end if
 
@@ -58,7 +58,7 @@ fun getSharedPref(context: Context, itemName: String?): Any?{
  * @param activity
  * @param key
  */
-fun removeSharedPrefItem(activity: Activity, itemKey: String):Boolean{
+fun removeSharedPrefItem(activity: Activity, itemKey: String): Boolean {
 
     //lets remove user account details and logout
     val pref: SharedPreferences = activity.getSharedPreferences(
@@ -78,7 +78,7 @@ fun removeSharedPrefItem(activity: Activity, itemKey: String):Boolean{
  * @param key
  * @param value
  */
-fun saveSharedPref(context: Context,key: String,value: Any){
+fun saveSharedPref(context: Context, key: String, value: Any) {
 
     //get the preference
     //if null create it
@@ -88,12 +88,12 @@ fun saveSharedPref(context: Context,key: String,value: Any){
     val editor: SharedPreferences.Editor = sharedPrefConn.edit()
 
     //test and insert data
-    when(value){
-        is Int     -> editor.putInt(key,value)
-        is Boolean -> editor.putBoolean(key,value)
-        is String  -> editor.putString(key,value)
-        is Float   -> editor.putFloat(key,value)
-        is Long    -> editor.putLong(key,value)
+    when (value) {
+        is Int -> editor.putInt(key, value)
+        is Boolean -> editor.putBoolean(key, value)
+        is String -> editor.putString(key, value)
+        is Float -> editor.putFloat(key, value)
+        is Long -> editor.putLong(key, value)
 
     }//end if
 
@@ -106,16 +106,15 @@ fun saveSharedPref(context: Context,key: String,value: Any){
  * hideStatusBar
  * @param context
  */
-fun hideStatusBar(activity: AppCompatActivity){
+fun hideStatusBar(activity: AppCompatActivity) {
 
     //jellybean and lower
-    if(Build.VERSION.SDK_INT < 16){
+    if (Build.VERSION.SDK_INT < 16) {
         activity.getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
-    }
-    else{//else if greater than android 4
+    } else {//else if greater than android 4
 
         //get decor view
         val decorView: View = activity.getWindow().decorView
@@ -133,7 +132,7 @@ fun hideStatusBar(activity: AppCompatActivity){
  * minimizeApp
  * @param activity
  */
-fun minimizeApp(activity: Activity){
+fun minimizeApp(activity: Activity) {
     val i = Intent(Intent.ACTION_MAIN);
     i.addCategory(Intent.CATEGORY_HOME);
     i.flags = Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -154,10 +153,10 @@ fun calculateNoOfColumns(context: Context,colSize: Int): Int {
  *   alertDialog
  *   @param context Context
  **/
-fun  progressDialog(
+fun progressDialog(
         activity: Activity,
         text: Any = "Loading ..",
-        isCancellable: Boolean = true): AppCompatDialog{
+        isCancellable: Boolean = true): AppCompatDialog {
 
 
     val dialog = AppCompatDialog(activity)
@@ -170,7 +169,7 @@ fun  progressDialog(
     val progressLayout = activity
             .layoutInflater
             .inflate(R.layout.indeterminate_progress_bar,
-                    rootView,false)
+                    rootView, false)
 
     val progressBar = progressLayout
             .findViewById<ProgressBar>(R.id.progress_bar)
@@ -178,9 +177,9 @@ fun  progressDialog(
     val progressBarTextView = progressLayout
             .findViewById<TextView>(R.id.progress_bar_text)
 
-    if(text is Int){
+    if (text is Int) {
         progressBarTextView.text = activity.getString(text)
-    }else if(text is String){
+    } else if (text is String) {
         progressBarTextView.text = text
     }
 
@@ -202,7 +201,7 @@ fun  progressDialog(
 
 
 //isURLValid
-fun isURLValid(url: String): Boolean{
+fun isURLValid(url: String): Boolean {
 
     val pattern = PatternsCompat.WEB_URL
 
@@ -213,13 +212,13 @@ fun isURLValid(url: String): Boolean{
 
 
 //run in bg mode
-fun <T>  runInBg(
+fun <T> runInBg(
         activity: Activity,
         task: () -> T,
         beforeTask: (() -> Unit)? = null,
         afterTask: ((activity: Activity, result: T?) -> Unit)? = null,
         onError: ((error: Exception) -> Unit)? = null
-){
+) {
 
     try {
 
@@ -237,11 +236,11 @@ fun <T>  runInBg(
             }//end bg mode
 
             //now lets update ui if possible
-            afterTask?.invoke(activity,deferred.await())
+            afterTask?.invoke(activity, deferred.await())
 
         }//end async
 
-    }catch(e: Exception){
+    } catch (e: Exception) {
 
         if (onError != null) {
             //execute on error
@@ -263,12 +262,12 @@ fun <T> varDump(obj: T): String {
 
 
 //set header info
-fun setDrawerHeaderInfo(context: Context,headerView: View){
+fun setDrawerHeaderInfo(context: Context, headerView: View) {
     //lets get userInfo
     val userInfo = getUserInfo(context)
 
     //if user info is available
-    if(userInfo != null){
+    if (userInfo != null) {
 
         val displayName = userInfo.getString("display_name")
 
@@ -286,12 +285,12 @@ fun setDrawerHeaderInfo(context: Context,headerView: View){
                 .findViewById<TextView>(R.id.user_email)
                 .text = userEmail
 
-        if( userInfo.has("profile_pic_url")) {
+        if (userInfo.has("profile_pic_url")) {
 
             var profilePicUrl = userInfo.getString("profile_pic_url")
 
             //profile pic image view
-            val profilePicImageView =  headerView
+            val profilePicImageView = headerView
                     .findViewById<ImageView>(R.id.profile_pic)
 
             // Log.e("ProfilePic",profilePicUrl)
@@ -319,13 +318,13 @@ fun setDrawerHeaderInfo(context: Context,headerView: View){
 fun <T> startClassActivity(
         activity: Activity,
         ActivityClass: Class<T>,
-        clearActivityStack: Boolean = false){
+        clearActivityStack: Boolean = false) {
 
     //leave this intent to auth intent
-    val i = Intent(activity,ActivityClass)
+    val i = Intent(activity, ActivityClass)
 
     //if clear activity Stack is true
-    if(clearActivityStack) {
+    if (clearActivityStack) {
         i.flags = (
                 Intent.FLAG_ACTIVITY_CLEAR_TOP or
                         Intent.FLAG_ACTIVITY_CLEAR_TASK or
@@ -339,23 +338,23 @@ fun <T> startClassActivity(
 
 
 //getDayStart - Start of the day
-fun getDayStart(cal: Calendar): Calendar{
+fun getDayStart(cal: Calendar): Calendar {
 
-    cal.set(Calendar.HOUR,0)
-    cal.set(Calendar.MINUTE,0)
-    cal.set(Calendar.SECOND,0)
-    cal.set(Calendar.MILLISECOND,0)
+    cal.set(Calendar.HOUR, 0)
+    cal.set(Calendar.MINUTE, 0)
+    cal.set(Calendar.SECOND, 0)
+    cal.set(Calendar.MILLISECOND, 0)
 
     return cal
 }//end
 
 //getEnd Day , End of the day
-fun getDayEnd(cal: Calendar): Calendar{
+fun getDayEnd(cal: Calendar): Calendar {
 
-    cal.set(Calendar.HOUR,23)
-    cal.set(Calendar.MINUTE,59)
-    cal.set(Calendar.SECOND,59)
-    cal.set(Calendar.MILLISECOND,999)
+    cal.set(Calendar.HOUR, 23)
+    cal.set(Calendar.MINUTE, 59)
+    cal.set(Calendar.SECOND, 59)
+    cal.set(Calendar.MILLISECOND, 999)
 
     return cal
 }

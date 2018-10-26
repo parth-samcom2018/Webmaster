@@ -17,7 +17,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -276,15 +275,14 @@ class SitemapsFragment : Fragment() {
 
         try {
             try {
-                if (results.size.toString().isNotEmpty()|| results.size.toString().isNullOrBlank()) {
+                if (results.size.toString().isNotEmpty() || results.size.toString().isNullOrBlank()) {
 
                     barChartIndexDataSet.add(BarEntry(results.get(0).contents.get(0).indexed.toFloat(), results.get(0).contents[0].submitted.toFloat()))
                     barChartSubmitDataSet.add(BarEntry(results.get(0).contents.get(1).indexed.toFloat(), results.get(0).contents.get(1).submitted.toFloat()))
                     barChartIndexValueSet.add(BarEntry(results.get(1).contents.get(0).indexed.toFloat(), results.get(1).contents.get(0).submitted.toFloat()))
                     barChartSubmitValueSet.add(BarEntry(results.get(1).contents.get(1).indexed.toFloat(), results.get(1).contents.get(1).submitted.toFloat()))
                 }
-            }
-            catch (e: java.lang.IndexOutOfBoundsException) {
+            } catch (e: java.lang.IndexOutOfBoundsException) {
                 e.printStackTrace()
             }
 

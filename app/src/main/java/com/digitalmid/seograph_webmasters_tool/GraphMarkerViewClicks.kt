@@ -10,7 +10,6 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointF
 import com.google.api.services.webmasters.model.ApiDataRow
-import java.lang.NullPointerException
 import java.util.*
 
 
@@ -59,9 +58,7 @@ class GraphMarkerViewClicks(val ctx: Context,
             position.text = posText
 
             super.refreshContent(e, highlight)
-        }
-
-        catch (e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }//end

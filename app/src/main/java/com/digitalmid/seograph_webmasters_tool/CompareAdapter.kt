@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.digitalmid.seograph_webmasters_tool.R
-import com.digitalmid.seograph_webmasters_tool.getDateTime
 import com.google.api.services.webmasters.model.ApiDataRow
 
 
@@ -84,7 +83,7 @@ class CompareAdapter(val dataList: FragmentActivity, val items: MutableList<ApiD
 
 
             try {
-                textKeys?.text = user.getKeys().toString().replace("[","").replace("]","");
+                textKeys?.text = user.getKeys().toString().replace("[", "").replace("]", "");
 
             } catch (e: NullPointerException) {
                 e.printStackTrace()

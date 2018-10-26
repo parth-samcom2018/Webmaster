@@ -1,20 +1,12 @@
 package com.digitalmid.seograph_webmasters_tool
 
-import android.content.Context
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import com.google.api.services.webmasters.model.ApiDataRow
-import java.lang.NullPointerException
-import org.json.JSONException
-import org.json.JSONObject
-import org.json.JSONArray
-
-
 
 
 class TotalAnalyticAdapter(val dataList: FragmentActivity, val items: MutableList<ApiDataRow>) : RecyclerView.Adapter<TotalAnalyticAdapter.ViewHolder>() {
@@ -38,17 +30,15 @@ class TotalAnalyticAdapter(val dataList: FragmentActivity, val items: MutableLis
     }
 
 
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
-
-        fun bindItems(user: ApiDataRow){
+        fun bindItems(user: ApiDataRow) {
 
             val textClicks = itemView.findViewById<TextView>(R.id.tvClicks)
             val textPosition = itemView.findViewById<TextView>(R.id.tvPosition)
             val textTotal_data = itemView.findViewById<TextView>(R.id.tvTotal_data)
             val textper_data = itemView.findViewById<TextView>(R.id.tvper_data)
-
 
 
             // show data

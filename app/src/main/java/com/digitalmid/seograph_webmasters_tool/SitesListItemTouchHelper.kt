@@ -7,31 +7,30 @@ import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log
 
 /**
  * Created by dr_success on 8/5/2017.
  */
 class SitesListItemTouchHelper(
-                               val context: Context,
-                               val recyclerView: RecyclerView?,
-                               dragDir: Int = 0,
-                               swipeDir: Int = ItemTouchHelper.LEFT or
-                               ItemTouchHelper.RIGHT):
-     ItemTouchHelper.SimpleCallback(dragDir,swipeDir) {
+        val context: Context,
+        val recyclerView: RecyclerView?,
+        dragDir: Int = 0,
+        swipeDir: Int = ItemTouchHelper.LEFT or
+                ItemTouchHelper.RIGHT) :
+        ItemTouchHelper.SimpleCallback(dragDir, swipeDir) {
 
     //swipped item background
     val background: ColorDrawable = ColorDrawable()
 
     //delete icon to  draw
     val deleteIcon: Drawable = ContextCompat
-                    .getDrawable(context,R.drawable.ic_action_delete)
+            .getDrawable(context, R.drawable.ic_action_delete)
 
     //we dont need move
     override fun onMove(
             recyclerView: RecyclerView,
             srcViewHolder: RecyclerView.ViewHolder,
-            targetViewHolder: RecyclerView.ViewHolder): Boolean{
+            targetViewHolder: RecyclerView.ViewHolder): Boolean {
 
         return false
     }//end on move
@@ -41,7 +40,7 @@ class SitesListItemTouchHelper(
     override fun onSwiped(
             viewHolder: RecyclerView.ViewHolder,
             direction: Int
-    ){
+    ) {
 
         //lets get the swipping item position
         val position: Int = viewHolder.adapterPosition
@@ -79,10 +78,10 @@ class SitesListItemTouchHelper(
 
         //set the background color
         this.background
-            .color = ContextCompat.getColor(context,R.color.red)
+                .color = ContextCompat.getColor(context, R.color.red)
 
         //if dX is 0 , we set alpha to 0
-        if(Math.abs(dX.toInt()) == 0){
+        if (Math.abs(dX.toInt()) == 0) {
             this.background.alpha = 0
         }//end if
 
@@ -112,18 +111,18 @@ class SitesListItemTouchHelper(
         //if its right
         //a negative number is swiping to left side (less than 0)
         //which means we will show the icon at right
-        if(dX.toInt() <  0){
+        if (dX.toInt() < 0) {
 
-             deleteIconPosLeft = itemView.right - deleteIconWidth
+            deleteIconPosLeft = itemView.right - deleteIconWidth
 
             deleteIconPosRight = itemView.right
 
-        }else{
+        } else {
 
             //if its left
-             deleteIconPosLeft = 1
+            deleteIconPosLeft = 1
 
-             deleteIconPosRight = itemView.left + deleteIconWidth
+            deleteIconPosRight = itemView.left + deleteIconWidth
         }//end if its left or right
 
 
@@ -149,11 +148,10 @@ class SitesListItemTouchHelper(
     override fun getSwipeDirs(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder
-    ): Int{
+    ): Int {
 
         return super.getSwipeDirs(recyclerView, viewHolder)
     }//end getSwipeDir
-
 
 
 }//end class

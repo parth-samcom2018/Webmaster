@@ -6,18 +6,16 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.find
-import retrofit.Callback
-import retrofit.RetrofitError
-import retrofit.client.Response
 import java.net.URL
 import java.util.*
 import kotlin.concurrent.timerTask
@@ -26,25 +24,25 @@ import kotlin.concurrent.timerTask
  * Created by dr_success on 7/23/2017.
  */
 open class SitesListAdapter(
-        var sitesListData: ArrayList<MutableMap<String,String>>
-        ): RecyclerView.Adapter<SitesListAdapter.ViewHolder>(){
+        var sitesListData: ArrayList<MutableMap<String, String>>
+) : RecyclerView.Adapter<SitesListAdapter.ViewHolder>() {
 
     var context: Context? = null
 
     //items Pending Removal
-    var itemsPendingRemoval:ArrayList<MutableMap<String,String>> =  ArrayList()
+    var itemsPendingRemoval: ArrayList<MutableMap<String, String>> = ArrayList()
 
     //pending removal timeout
     val pendingRemovalTimeout = 5000
 
     //sites to delete timer jobs
     var itemsToDeleteTimerJobs:
-            MutableMap<String,Timer> = mutableMapOf<String,Timer>()
+            MutableMap<String, Timer> = mutableMapOf<String, Timer>()
 
     /**
      * SitesLisrAdapter.ViewHolder inner class
      */
-    open class ViewHolder(val layout: View): RecyclerView.ViewHolder(layout){
+    open class ViewHolder(val layout: View) : RecyclerView.ViewHolder(layout) {
 
         //for regular list row layout
         //this is what all the list view will
@@ -61,7 +59,7 @@ open class SitesListAdapter(
         /**swiped View Layout,
         after the list item is swipped,
         this is the layout to be used
-        **/
+         **/
         var swipeRowLayout: RelativeLayout
 
         var undoSiteDelete: TextView
@@ -69,17 +67,17 @@ open class SitesListAdapter(
         /**
          * constructor
          */
-        init{
+        init {
 
             //swiped view layout
             this.swipeRowLayout = layout
-                                    .findViewById(R.id.swipe_row_layout)
+                    .findViewById(R.id.swipe_row_layout)
 
             //undo site delete
             this.undoSiteDelete = layout
                     .findViewById(R.id.undo_delete)
 
-           //regular sitelist row layout
+            //regular sitelist row layout
             this.normalRowLayout = layout
                     .findViewById(R.id.normal_row_layout)
 
@@ -87,7 +85,7 @@ open class SitesListAdapter(
             this.siteHostTextView = this.layout.find(R.id.site_host)
 
             //sitePreview
-            this.protocolImageView =  this.layout.find(R.id.protocol_icon)
+            this.protocolImageView = this.layout.find(R.id.protocol_icon)
 
             this.protocolText = this.layout.find(R.id.protocol_text)
 
@@ -99,7 +97,6 @@ open class SitesListAdapter(
     }//end inner class
 
 
-
     /**
      * onCreateViewHolder
      * @param parent
@@ -107,18 +104,18 @@ open class SitesListAdapter(
     override fun onCreateViewHolder(
             parent: ViewGroup,
             viewType: Int
-    ): SitesListAdapter.ViewHolder{
+    ): SitesListAdapter.ViewHolder {
 
         this.context = parent.context
 
         //inflate view
-       val layout: View = LayoutInflater
-                            .from(parent.context)
-                            .inflate(
-                                    R.layout.sites_list_row_layout,
-                                    parent,
-                                    false
-                            )
+        val layout: View = LayoutInflater
+                .from(parent.context)
+                .inflate(
+                        R.layout.sites_list_row_layout,
+                        parent,
+                        false
+                )
         val layoutView: ViewHolder = ViewHolder(layout)
 
         return layoutView
@@ -127,12 +124,12 @@ open class SitesListAdapter(
     /**
      * pendingRemoval
      */
-    fun itemPendingRemoval(position: Int){
+    fun itemPendingRemoval(position: Int) {
 
         val siteData = this.sitesListData[position]
 
         //skip if item is pending deletion
-        if(itemsPendingRemoval.contains(siteData)){
+        if (itemsPendingRemoval.contains(siteData)) {
             return
         }//end if
 
@@ -140,7 +137,7 @@ open class SitesListAdapter(
         itemsPendingRemoval.add(siteData)
 
         //pending item id
-       // val itemPedingRemovalId =  itemsPendingRemoval.size - 1
+        // val itemPedingRemovalId =  itemsPendingRemoval.size - 1
 
         //lets notify itemChange so that ,the undo will be
         //shown
@@ -149,7 +146,7 @@ open class SitesListAdapter(
         val timer = Timer()
 
         //delay exec for 5secs
-        timer.schedule(timerTask{
+        timer.schedule(timerTask {
 
             //lets now remove data from itemPendingRemoval list
             itemsPendingRemoval.remove(siteData)
@@ -165,24 +162,10 @@ open class SitesListAdapter(
             val siteUrl = siteData["site_url"].toString()
 
             //lets delete site now
-            WMTools().deleteSite(activity,siteUrl )
+            WMTools().deleteSite(activity, siteUrl)
 
-            Log.e("Deleting","Deleting Site")
 
-            Log.e("delete"  , "" + siteUrl)
-
-            /*DM().getApi().deleteWebsite("free123216@gmail.com", siteUrl,object : Callback<Response> {
-                override fun success(response: Response, response2: Response) {
-                    Log.d("onsuccess", "delete website" + response)
-
-                }
-
-                override fun failure(error: RetrofitError) {
-                    Log.d("onfailed", "failed to delete website" + error)
-                }
-            })*/
-
-        },this.pendingRemovalTimeout.toLong())
+        }, this.pendingRemovalTimeout.toLong())
 
         //lets save the task so that we can cancel it on cancel
         itemsToDeleteTimerJobs.put(siteData["site_url"].toString(), timer)
@@ -194,7 +177,7 @@ open class SitesListAdapter(
      * @param holder: view holder
      * @param position: an Integer
      */
-    override fun onBindViewHolder(siteViewHolder: ViewHolder,position: Int){
+    override fun onBindViewHolder(siteViewHolder: ViewHolder, position: Int) {
 
         //lets get data row
         val siteData = this.sitesListData[position]
@@ -203,7 +186,7 @@ open class SitesListAdapter(
 
         //before we move on, lets check if the item is actually
         //pending
-        if(this.itemsPendingRemoval.contains(siteData)){
+        if (this.itemsPendingRemoval.contains(siteData)) {
 
             //hide the normal row layout
             siteViewHolder.normalRowLayout.visibility = View.GONE
@@ -215,42 +198,43 @@ open class SitesListAdapter(
             //now lets also respond to the undo text click
             siteViewHolder.undoSiteDelete.setOnClickListener({
 
-               //run task in a coroutine else screen will crash
-               launch(CommonPool) {
+                //run task in a coroutine else screen will crash
+                launch(CommonPool) {
 
-                //lets cancel the timed method which wil delete
-                //the site
-                if(itemsToDeleteTimerJobs.containsKey(siteUrl)){
+                    //lets cancel the timed method which wil delete
+                    //the site
+                    if (itemsToDeleteTimerJobs.containsKey(siteUrl)) {
 
 
-                      val timer = itemsToDeleteTimerJobs[siteUrl]
+                        val timer = itemsToDeleteTimerJobs[siteUrl]
 
-                      //cancel timer
-                      timer?.cancel()
+                        //cancel timer
+                        timer?.cancel()
 
-                      //purge timer queue
-                      timer?.purge()
+                        //purge timer queue
+                        timer?.purge()
 
-                      //remove it from our queue too
-                      itemsToDeleteTimerJobs.remove(siteUrl)
+                        //remove it from our queue too
+                        itemsToDeleteTimerJobs.remove(siteUrl)
 
-                }//end if timer exists
 
-                 //remove the item from the items Pending Removal list
-                 itemsPendingRemoval.remove(siteData)
+                    }//end if timer exists
 
-                //lets renotify item change
-                notifyItemChanged(position)
+                    //remove the item from the items Pending Removal list
+                    itemsPendingRemoval.remove(siteData)
 
-               }//end run it in a coroutine
+                    //lets renotify item change
+                    notifyItemChanged(position)
 
+                }//end run it in a coroutine
+                //Log.d("site", "undourl : " + siteUrl)
             })//end
 
             //stop excution
             return
         }//end if item is pending deletion
 
-        else{//else lets hide swipe view and show normal view
+        else {//else lets hide swipe view and show normal view
 
             //show the normal row layout
             siteViewHolder.normalRowLayout.visibility = View.VISIBLE
@@ -269,9 +253,9 @@ open class SitesListAdapter(
 
             //openview site Intent
             //lets open view site activity
-            val i = Intent(context,ViewSiteActivity::class.java)
-                    i.putExtra("site_url",siteUrl)
-                     context?.startActivity(i)
+            val i = Intent(context, ViewSiteActivity::class.java)
+            i.putExtra("site_url", siteUrl)
+            context?.startActivity(i)
 
         })//end click listener
 
@@ -292,7 +276,7 @@ open class SitesListAdapter(
 
         //the protocol is already http,
         //but if https we change icon
-        if(urlProtocol.toLowerCase() == "https"){
+        if (urlProtocol.toLowerCase() == "https") {
 
             //change view info
             changeSiteItemViewInfo(
@@ -306,7 +290,7 @@ open class SitesListAdapter(
 
 
         //if user doesnt own site
-        if(permissionLevel.equals("siteOwner",true)){
+        if (permissionLevel.equals("siteOwner", true)) {
 
             changeSiteItemViewInfo(
                     siteViewHolder.permissionLevelImageView,
@@ -316,7 +300,7 @@ open class SitesListAdapter(
                     R.color.green
             )
 
-        }else{//if not site owner
+        } else {//if not site owner
 
             changeSiteItemViewInfo(
                     siteViewHolder.permissionLevelImageView,
@@ -339,15 +323,15 @@ open class SitesListAdapter(
             textView: TextView,
             newText: Any,
             newIcon: Int,
-            iconColor: Int){
+            iconColor: Int) {
 
 
         //smart casting
-        if(newText is String){
+        if (newText is String) {
 
             //set text
-             textView.text = newText
-        }else if(newText is Int){
+            textView.text = newText
+        } else if (newText is Int) {
 
             //get string resource
             textView.text = this.context?.getString(newText)
@@ -363,7 +347,7 @@ open class SitesListAdapter(
                 )//end set drawable
 
         //get color
-        val color =ContextCompat.getColor(this.context,iconColor)
+        val color = ContextCompat.getColor(this.context, iconColor)
 
         //change color
         imageView
@@ -377,7 +361,7 @@ open class SitesListAdapter(
     /**
      * getItemCount
      */
-    override fun  getItemCount():Int{
+    override fun getItemCount(): Int {
         return this.sitesListData.size
     }///end get item count
 

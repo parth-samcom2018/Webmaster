@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.digitalmid.seograph_webmasters_tool.R
 import com.google.api.services.webmasters.model.ApiDataRow
-import java.lang.NullPointerException
 
 class CompareOldAdapter(val dataList: FragmentActivity, val items: MutableList<ApiDataRow>) : RecyclerView.Adapter<CompareOldAdapter.ViewHolder>() {
 
@@ -30,7 +29,6 @@ class CompareOldAdapter(val dataList: FragmentActivity, val items: MutableList<A
         return items.size
     }
 
-    
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindItems(user: ApiDataRow) {

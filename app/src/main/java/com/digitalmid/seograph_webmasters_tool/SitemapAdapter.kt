@@ -42,8 +42,7 @@ class SitemapAdapter(val dataList: FragmentActivity, val items: MutableList<WmxS
                 texttype.text = user.contents[0].type.toString()
                 textindex.text = user.contents[0].indexed.toString()
                 textsubmitted.text = user.contents[0].submitted.toString()
-            }
-            catch (e: NullPointerException) {
+            } catch (e: NullPointerException) {
                 e.printStackTrace()
             }
 

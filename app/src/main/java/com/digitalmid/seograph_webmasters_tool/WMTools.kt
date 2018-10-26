@@ -2,8 +2,6 @@ package com.digitalmid.seograph_webmasters_tool
 
 import android.app.Activity
 import android.content.Context
-import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TextInputLayout
@@ -16,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ProgressBar
-import android.widget.Toast
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
@@ -101,7 +98,6 @@ class WMTools {
         )
 
 
-
         //lets get fields
         val siteUrlEditText = dialogLayout
                 .findViewById<AppCompatEditText>(R.id.site_url)
@@ -109,7 +105,6 @@ class WMTools {
         //editText Layout
         val inputLayout: TextInputLayout = dialogLayout
                 .findViewById<TextInputLayout>(R.id.text_input_layout)
-
 
 
         //add btn
@@ -219,11 +214,11 @@ class WMTools {
             val userInfo = getUserInfo(activity)
 
 
-            if (userInfo!=null) {
+            if (userInfo != null) {
                 val userEmail = userInfo.getString("email")
                 Log.d("user", "email : " + userEmail)
 
-                DM().getApi().postWebsite(userEmail, siteUrl,object : Callback<Response> {
+                DM().getApi().postWebsite(userEmail, siteUrl, object : Callback<Response> {
                     override fun success(response: Response, response2: Response) {
                         Log.d("onsuccess", "add website" + response)
                     }
@@ -233,7 +228,6 @@ class WMTools {
                     }
                 })
             }
-
 
 
             //stop progress bar
@@ -286,17 +280,20 @@ class WMTools {
 
             val userInfo = getUserInfo(activity)
 
-            if (userInfo!=null) {
-                val userEmail = userInfo.getString("email")
-                Log.d("delete", "site : " + siteUrl)
 
-                DM().getApi().deleteWebsite(userEmail, siteUrl,object : Callback<Response> {
+            if (userInfo != null) {
+                val userEmail = userInfo.getString("email")
+                Log.d("user", "email : " + userEmail)
+                Log.d("user", "url : " + siteUrl)
+
+                DM().getApi().deleteWebsite(userEmail, siteUrl, object : Callback<Response> {
                     override fun success(response: Response, response2: Response) {
-                        Log.d("delete", "add website" + response)
+
+                        Log.d("onsuccess", "delete website" + response)
                     }
 
                     override fun failure(error: RetrofitError) {
-                        Log.d("onfailed", "failed to add" + error)
+                        Log.d("onfailed", "failed to delete" + error)
                     }
                 })
             }

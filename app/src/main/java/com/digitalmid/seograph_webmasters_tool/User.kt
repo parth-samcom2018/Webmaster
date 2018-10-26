@@ -2,9 +2,6 @@ package com.digitalmid.seograph_webmasters_tool
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
-import android.widget.Toast
 import org.json.JSONObject
 
 /**
@@ -14,16 +11,16 @@ import org.json.JSONObject
 /**
  * getUserInfo
  */
-fun getUserInfo(context: Context): JSONObject?{
+fun getUserInfo(context: Context): JSONObject? {
 
     //set UserInfoJsonObj to null
     var UserInfoJsonObj: JSONObject? = null
 
     //lets get shared pref
-     val UserInfoJsonStr = getSharedPref(context, "user_info")
+    val UserInfoJsonStr = getSharedPref(context, "user_info")
 
     //lets now convert the data to json object
-    if(UserInfoJsonStr is String){
+    if (UserInfoJsonStr is String) {
         UserInfoJsonObj = JSONObject(UserInfoJsonStr)
     }
 
@@ -33,12 +30,12 @@ fun getUserInfo(context: Context): JSONObject?{
 
 
 //revoke account permission
-fun removeUserInfo(activity: Activity):Boolean{
+fun removeUserInfo(activity: Activity): Boolean {
 
-    removeSharedPrefItem(activity,"user_info")
+    removeSharedPrefItem(activity, "user_info")
 
     //start class activity
-    startClassActivity<AuthActivity>(activity,AuthActivity::class.java,true)
+    startClassActivity<AuthActivity>(activity, AuthActivity::class.java, true)
 
     //Toast.make
     //finish the current activity

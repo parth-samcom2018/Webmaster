@@ -1,12 +1,8 @@
 package com.digitalmid.seograph_webmasters_tool;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.widget.TextView;
 
-public class sample extends AppCompatActivity{
+public class sample extends AppCompatActivity {
 
     String aa = "0";
 
@@ -36,6 +32,5 @@ public class sample extends AppCompatActivity{
 
     }
 
-    
 
 }

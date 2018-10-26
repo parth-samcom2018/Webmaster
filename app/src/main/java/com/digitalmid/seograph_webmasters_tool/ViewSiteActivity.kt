@@ -1,19 +1,10 @@
 package com.digitalmid.seograph_webmasters_tool
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
-import android.view.MotionEvent
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.Toast
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.InterstitialAd
 import java.net.URL
 
 
@@ -77,8 +68,6 @@ class ViewSiteActivity : DrawerActivity() {
     fun fetchSiteUrl(): String {
         return this.siteUrl
     }//end
-
-
 
 
 }//end class

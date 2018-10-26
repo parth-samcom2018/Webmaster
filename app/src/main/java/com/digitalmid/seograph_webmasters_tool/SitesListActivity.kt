@@ -4,7 +4,6 @@ import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.preference.PreferenceManager
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -18,16 +17,13 @@ import com.google.android.gms.ads.MobileAds
 import com.google.api.services.webmasters.Webmasters
 import com.google.api.services.webmasters.model.SitesListResponse
 import com.google.api.services.webmasters.model.WmxSite
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_sites_list.*
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.runBlocking
 import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.doAsync
 import org.json.JSONArray
-import android.content.SharedPreferences
-import android.widget.Toast
-import com.google.firebase.iid.FirebaseInstanceId
-import kotlinx.android.synthetic.main.add_site_dialog_layout.*
 
 
 class SitesListActivity : DrawerActivity(),
@@ -61,12 +57,12 @@ class SitesListActivity : DrawerActivity(),
         super.onCreate(savedInstanceState)
 
         var token = FirebaseInstanceId.getInstance().token
-        Log.d(TAG,"Token : "+token)
-        var bodyMessage= intent.getStringExtra("Notification")
-        if(bodyMessage != null){
+        Log.d("firebase", "Token : " + token)
+        var bodyMessage = intent.getStringExtra("Notification")
+        if (bodyMessage != null) {
             body_text_view.text = bodyMessage
 
-            Log.d(TAG, "token: " + token)
+            Log.d("firebase", "token: " + token)
         }
 
         //lets register the add site dialog

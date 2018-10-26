@@ -11,7 +11,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointF
 import com.google.api.services.webmasters.model.ApiDataRow
-import java.util.ArrayList
+import java.util.*
 
 class GraphMarkerViewCtr(val ctx: Context,
                          val layoutRes: Int = R.layout.graph_marker_view_ctr,
@@ -57,8 +57,7 @@ class GraphMarkerViewCtr(val ctx: Context,
             position.text = posText*/
 
             super.refreshContent(e, highlight)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 

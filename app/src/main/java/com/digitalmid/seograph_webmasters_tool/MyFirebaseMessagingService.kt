@@ -27,32 +27,32 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         //Verify if the message contains notification
         if (remoteMessage.notification != null) {
-            Log.d(TAG,"Message body : "+remoteMessage.notification.body)
+            Log.d(TAG, "Message body : " + remoteMessage.notification.body)
             sendNotification(remoteMessage.notification.body)
         }
     }
 
     private fun sendNotification(body: String?) {
-        var intent = Intent(this,SitesListActivity::class.java)
+        var intent = Intent(this, SitesListActivity::class.java)
         //If set, and the activity being launched is already running in the current task,
         //then instead of launching a new instance of that activity, all of the other activities
         // on top of it will be closed and this Intent will be delivered to the (now on top)
         // old activity as a new Intent.
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        intent.putExtra("Notification",body)
+        intent.putExtra("Notification", body)
 
-        var pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT/*Flag indicating that this PendingIntent can be used only once.*/)
+        var pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT/*Flag indicating that this PendingIntent can be used only once.*/)
         val notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
-        var notificationBuilder = NotificationCompat.Builder(this,"Notification")
+        var notificationBuilder = NotificationCompat.Builder(this, "Notification")
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Push Notification FCM")
+                .setContentTitle("Hello Chaitanya")
                 .setContentText(body)
                 .setAutoCancel(true)
                 .setSound(notificationSound)
                 .setContentIntent(pendingIntent)
 
         var notificationManager: NotificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(0,notificationBuilder.build())
+        notificationManager.notify(0, notificationBuilder.build())
     }
 }

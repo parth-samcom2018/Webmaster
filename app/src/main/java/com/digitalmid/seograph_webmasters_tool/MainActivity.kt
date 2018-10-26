@@ -1,7 +1,7 @@
 package com.digitalmid.seograph_webmasters_tool
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import org.jetbrains.anko.clearTop
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.newTask
@@ -13,10 +13,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
 
-        val introCompleted :Any? = getSharedPref(this, "intro_completed") as Boolean?
+        val introCompleted: Any? = getSharedPref(this, "intro_completed") as Boolean?
 
         //if user hasnt finihsed intro
-        if(introCompleted != true){
+        if (introCompleted != true) {
 
             //start intro
             startActivity(
@@ -46,14 +46,14 @@ class MainActivity : AppCompatActivity() {
 
         }else {//else show login activity
     */
-            //start auth activity
-            startActivity(
-                    intentFor<AuthActivity>()
-                            .clearTop()
-                            .newTask()
-            )//end start auth activity
+        //start auth activity
+        startActivity(
+                intentFor<AuthActivity>()
+                        .clearTop()
+                        .newTask()
+        )//end start auth activity
 
-       // }//end if userinfo exists or not
+        // }//end if userinfo exists or not
 
 
         //finish activity

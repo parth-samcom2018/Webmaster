@@ -52,9 +52,7 @@ class GraphMarkerSitemap(val ctx: Context,
             tv_type.text = pathText
             tv_indexvalue.text = indexedValue
             tv_submittedvalue.text = submittedValue
-        }
-
-        catch (e: IndexOutOfBoundsException) {
+        } catch (e: IndexOutOfBoundsException) {
             e.printStackTrace()
         }
 
@@ -83,7 +81,7 @@ class GraphMarkerSitemap(val ctx: Context,
     fun screenSize(): Display {
 
         val display: Display = (ctx as Activity).windowManager.defaultDisplay
-        val size: Point =  Point();
+        val size: Point = Point();
         display.getSize(size);
 
         return display

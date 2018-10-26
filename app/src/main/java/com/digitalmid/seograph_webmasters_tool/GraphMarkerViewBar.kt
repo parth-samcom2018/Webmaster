@@ -25,7 +25,7 @@ class GraphMarkerViewBar(val ctx: Context,
     val imp: TextView = findViewById<TextView>(R.id.imp)
     val position: TextView = findViewById<TextView>(R.id.position)
 
-    var mOffset:MPPointF? = null
+    var mOffset: MPPointF? = null
 
 
     /**
@@ -78,7 +78,7 @@ class GraphMarkerViewBar(val ctx: Context,
     fun screenSize(): Display {
 
         val display: Display = (ctx as Activity).windowManager.defaultDisplay
-        val size: Point =  Point();
+        val size: Point = Point();
         display.getSize(size);
 
         return display

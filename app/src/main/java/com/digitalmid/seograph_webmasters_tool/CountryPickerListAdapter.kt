@@ -12,12 +12,12 @@ import android.widget.ImageView
  * Created by dr_success on 9/4/2017.
  */
 class CountryPickerListAdapter(
-            val mcontext: Context,
-            val countryList: List<Country>
-): ArrayAdapter<Country>(
-                mcontext,
-                -1,
-                countryList
+        val mcontext: Context,
+        val countryList: List<Country>
+) : ArrayAdapter<Country>(
+        mcontext,
+        -1,
+        countryList
 ) {
 
 
@@ -28,7 +28,7 @@ class CountryPickerListAdapter(
      */
     override fun getView(position: Int,
                          convertView: View?,
-                         parent: ViewGroup ): View{
+                         parent: ViewGroup): View {
 
         val countryData = countryList[position]
 
@@ -36,24 +36,24 @@ class CountryPickerListAdapter(
 
         var rowView = convertView
 
-        if(convertView == null){
+        if (convertView == null) {
 
             val inflater = mcontext
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-                rowView = inflater.inflate(resourceId,parent,false)
+            rowView = inflater.inflate(resourceId, parent, false)
         }
 
         //country flag
         val countryFlagView = rowView!!
-                                .findViewById<ImageView>(R.id.country_flag)
+                .findViewById<ImageView>(R.id.country_flag)
 
         //set flag
         countryFlagView.setImageResource(countryData.flag)
 
         //country name
         val countryNameView = rowView
-                                .findViewById<AppCompatTextView>(R.id.country_name)
+                .findViewById<AppCompatTextView>(R.id.country_name)
 
         //set we set the isocodes as tags
         //we dont wat to use position cos of undesirable behaviour
@@ -61,7 +61,7 @@ class CountryPickerListAdapter(
         rowView.tag = position
 
         //set country name
-        countryNameView.text =  countryData.name
+        countryNameView.text = countryData.name
 
         return rowView
     }//end get viw

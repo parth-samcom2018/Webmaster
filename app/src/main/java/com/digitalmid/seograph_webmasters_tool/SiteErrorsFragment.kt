@@ -15,21 +15,17 @@ import android.view.*
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.InterstitialAd
 import com.google.api.services.webmasters.model.UrlCrawlErrorsCountsQueryResponse
-import kotlinx.android.synthetic.main.fragment_analytics.*
 import kotlinx.android.synthetic.main.fragment_site_errors.*
 import org.json.JSONObject
-import java.lang.NumberFormatException
 import java.util.*
 
 
@@ -336,8 +332,7 @@ class SiteErrorsFragment : Fragment() {
                 timestampGraphEntries.add(Entry(index.toFloat(), timestampData))
 
                 //timestampGraphEntries.add(BarEntry(index.toFloat(), timestampData))
-            }
-            catch (e: NumberFormatException) {
+            } catch (e: NumberFormatException) {
                 e.printStackTrace()
             }
 
@@ -454,7 +449,7 @@ class SiteErrorsFragment : Fragment() {
         val bartimestampset = BarDataSet(barChartTimestampsDataSet, "timestamp")
         bartimestampset.color = Color.rgb(255, 109, 0)
 
-        val data = BarData(bardataset,barcategoryset,bartimestampset)
+        val data = BarData(bardataset, barcategoryset, bartimestampset)
         barChartSiteError.data = data // set the data and list of lables into chart
 
 
@@ -473,12 +468,11 @@ class SiteErrorsFragment : Fragment() {
             //for some strange reasons the indexes is based on the value
             //used in setLabelCount which is also the max in variable value
             if (xIndex >= totalDates) {
-                xIndex = totalDates -1
+                xIndex = totalDates - 1
             }
 
             xAxisLabels[xIndex]
         })//end
-
 
 
         barChartSiteError.animateY(1000)

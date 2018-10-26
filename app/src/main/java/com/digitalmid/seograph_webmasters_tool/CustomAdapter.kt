@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.google.api.services.webmasters.model.ApiDataRow
-import java.lang.NullPointerException
 
 class CustomAdapter(val dataList: FragmentActivity, val items: MutableList<ApiDataRow>) : RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
@@ -29,9 +28,8 @@ class CustomAdapter(val dataList: FragmentActivity, val items: MutableList<ApiDa
     }
 
 
-
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        fun bindItems(user: ApiDataRow){
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bindItems(user: ApiDataRow) {
             val textClicks = itemView.findViewById<TextView>(R.id.tvClicks)
             val textPosition = itemView.findViewById<TextView>(R.id.tvPosition)
             val textKeys = itemView.findViewById<TextView>(R.id.tvKeys)
@@ -57,14 +55,12 @@ class CustomAdapter(val dataList: FragmentActivity, val items: MutableList<ApiDa
 
 
             try {
-                textKeys?.text = user.getKeys().toString().replace("[","").replace("]","");
-            }
-            catch (e: NullPointerException){
+                textKeys?.text = user.getKeys().toString().replace("[", "").replace("]", "");
+            } catch (e: NullPointerException) {
                 e.printStackTrace()
             }
         }
     }
-
 
 
 }

@@ -9,9 +9,9 @@ import android.support.v4.app.FragmentPagerAdapter
  * Created by dr_success on 8/15/2017.
  */
 class ViewSiteTabPagerAdaper(
-                mcontext: Context,
-                fm: FragmentManager
-            ): FragmentPagerAdapter(fm){
+        mcontext: Context,
+        fm: FragmentManager
+) : FragmentPagerAdapter(fm) {
 
     //pages title list
     //arrangement order is very important
@@ -20,31 +20,31 @@ class ViewSiteTabPagerAdaper(
             mcontext.getString(R.string.site_errors),
             mcontext.getString(R.string.comparison_stats),
             mcontext.getString(R.string.sitemaps)
-            )
+    )
 
 
     /**
      * getCount
      */
-    override fun getCount(): Int{
-        return  pagesTitleList.size
+    override fun getCount(): Int {
+        return pagesTitleList.size
     }//end fun
 
 
     /**
      * getItem
      */
-    override fun getItem(position: Int): Fragment{
+    override fun getItem(position: Int): Fragment {
 
         //val pageTitle = pagesTitleList[position]
 
-       val pageFragment = when(position){
+        val pageFragment = when (position) {
             0 -> AnalyticsFragment()
             1 -> SiteErrorsFragment()
             2 -> ComparisonFragment()
             3 -> SitemapsFragment()
 
-           else -> AnalyticsFragment()
+            else -> AnalyticsFragment()
         }
 
         return pageFragment
@@ -55,7 +55,7 @@ class ViewSiteTabPagerAdaper(
      * getPageTitle - returning the page title as
      * tab title or name
      */
-    override fun getPageTitle(position: Int): CharSequence{
+    override fun getPageTitle(position: Int): CharSequence {
         return pagesTitleList[position]
     }//end fun
 

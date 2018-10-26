@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Window
 import android.widget.Toast
-import com.digitalmid.seograph_webmasters_tool.com.digitalmid.seograph_webmasters_tool.LoginModel
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -285,24 +284,24 @@ class AuthActivity : AppCompatActivity(),
                 userInfoObj!!.toString(),
                 googleAccessTokenResponse?.idToken.toString(),
                 object : Callback<Response> {
-            override fun success(t: Response?, response: Response?) {
-               Toast.makeText(mContext, "Successfully add data",Toast.LENGTH_SHORT).show()
-                Log.d("onsuccess", "id :" + account?.id)
-                Log.d("onsuccess", "name :" + account?.displayName)
-                Log.d("onsuccess", "email :" + account?.email)
-                Log.d("onsuccess", "deviceid :" + unique_id)
-                Log.d("onsuccess", "auth :" + authCode)
-                Log.d("onsuccess", "photo :" + account?.photoUrl)
-                Log.d("onsuccess", "accestoken :" + accessToken)
-                Log.d("onsuccess", "refreshtoken :" + refreshToken)
-                Log.d("onsuccess", "info :" + userInfoObj.toString())
-            }
+                    override fun success(t: Response?, response: Response?) {
+                        //Toast.makeText(mContext, "Successfully add data",Toast.LENGTH_SHORT).show()
+                        Log.d("onsuccess", "id :" + account?.id)
+                        Log.d("onsuccess", "name :" + account?.displayName)
+                        Log.d("onsuccess", "email :" + account?.email)
+                        Log.d("onsuccess", "deviceid :" + unique_id)
+                        Log.d("onsuccess", "auth :" + authCode)
+                        Log.d("onsuccess", "photo :" + account?.photoUrl)
+                        Log.d("onsuccess", "accestoken :" + accessToken)
+                        Log.d("onsuccess", "refreshtoken :" + refreshToken)
+                        Log.d("onsuccess", "info :" + userInfoObj.toString())
+                    }
 
-            override fun failure(error: RetrofitError?) {
-                Toast.makeText(mContext,"Failed to upload" ,Toast.LENGTH_SHORT).show()
-            }
+                    override fun failure(error: RetrofitError?) {
+                        Toast.makeText(mContext, "Failed to upload", Toast.LENGTH_SHORT).show()
+                    }
 
-        })
+                })
 
 
         /*Log.d("data", "googleIdtoken :" + googleAccessTokenResponse?.idToken.toString())

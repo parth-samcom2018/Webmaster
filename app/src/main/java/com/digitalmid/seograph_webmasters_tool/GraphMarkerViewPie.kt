@@ -6,11 +6,9 @@ import android.graphics.Point
 import android.view.Display
 import android.widget.TextView
 import com.github.mikephil.charting.components.MarkerView
-import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointF
-import com.github.mikephil.charting.utils.Utils
 import com.google.api.services.webmasters.model.ApiDataRow
 
 class GraphMarkerViewPie(val ctx: Context,
@@ -26,7 +24,7 @@ class GraphMarkerViewPie(val ctx: Context,
     val imp: TextView = findViewById<TextView>(R.id.imp)
     val position: TextView = findViewById<TextView>(R.id.position)
 
-    var mOffset:MPPointF? = null
+    var mOffset: MPPointF? = null
 
 
     /**
@@ -122,7 +120,7 @@ class GraphMarkerViewPie(val ctx: Context,
     fun screenSize(): Display {
 
         val display: Display = (ctx as Activity).windowManager.defaultDisplay
-        val size: Point =  Point();
+        val size: Point = Point();
         display.getSize(size);
 
         return display

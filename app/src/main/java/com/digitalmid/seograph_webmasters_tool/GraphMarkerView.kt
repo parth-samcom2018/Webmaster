@@ -3,7 +3,6 @@ package com.digitalmid.seograph_webmasters_tool
 import android.app.Activity
 import android.content.Context
 import android.graphics.Point
-import android.util.Log
 import android.view.Display
 import android.widget.TextView
 import com.github.mikephil.charting.components.MarkerView
@@ -16,20 +15,19 @@ import com.google.api.services.webmasters.model.ApiDataRow
  * Created by dr_success on 9/29/2017.
  */
 class GraphMarkerView(val ctx: Context,
-                       val layoutRes: Int = R.layout.graph_marker_view,
-                       val xAxisDates: ArrayList<String>,
-                       val dataSet: MutableList<ApiDataRow>):
+                      val layoutRes: Int = R.layout.graph_marker_view,
+                      val xAxisDates: ArrayList<String>,
+                      val dataSet: MutableList<ApiDataRow>) :
 
-        MarkerView(ctx,layoutRes){
+        MarkerView(ctx, layoutRes) {
 
-    val date:TextView = findViewById<TextView>(R.id.date)
-    val clicks:TextView = findViewById<TextView>(R.id.clicks)
-    val ctr:TextView = findViewById<TextView>(R.id.ctr)
-    val imp:TextView = findViewById<TextView>(R.id.imp)
-    val position:TextView = findViewById<TextView>(R.id.position)
+    val date: TextView = findViewById<TextView>(R.id.date)
+    val clicks: TextView = findViewById<TextView>(R.id.clicks)
+    val ctr: TextView = findViewById<TextView>(R.id.ctr)
+    val imp: TextView = findViewById<TextView>(R.id.imp)
+    val position: TextView = findViewById<TextView>(R.id.position)
 
-    var mOffset:MPPointF? = null
-
+    var mOffset: MPPointF? = null
 
 
     /**
@@ -67,17 +65,17 @@ class GraphMarkerView(val ctx: Context,
     }//end
 
     //screen size
-   fun screenSize():Display {
+    fun screenSize(): Display {
 
         val display: Display = (ctx as Activity).windowManager.defaultDisplay
-        val size: Point =  Point();
-            display.getSize(size);
+        val size: Point = Point();
+        display.getSize(size);
 
-       return display
+        return display
     }//end
 
     override fun getOffset(): MPPointF {
-      //   super.getOffset()
+        //   super.getOffset()
 
         if (mOffset == null) {
             ///center the marker horizontally and vertically

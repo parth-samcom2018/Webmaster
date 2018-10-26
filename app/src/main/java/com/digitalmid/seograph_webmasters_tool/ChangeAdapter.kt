@@ -1,7 +1,6 @@
 package com.digitalmid.seograph_webmasters_tool.com.digitalmid.seograph_webmasters_tool
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -43,30 +42,20 @@ class ChangeAdapter(val dataList: FragmentActivity, val items: MutableList<ApiDa
         @SuppressLint("ResourceAsColor")
         fun bindItems(user: ApiDataRow) {
             val textClicks = itemView.findViewById<TextView>(R.id.tv_change)
+            val textKeys = itemView.findViewById<TextView>(R.id.tvKeys)
+
 
             // show data
-            //textClicks.text = user.clicks.toString()
+            textClicks.text = user.clicks.toString()
 
-            //val x = user.clicks.toInt() - user.clicks.toInt()
-            //val y = user.position.toInt()
-
-            //val add = x + y
-            //textClicks.setText("$x - $y = $sub")
-
-            val x = user.position.toInt() - user.clicks.toInt()
-
-            textClicks.setText("" + "$x")
-
-            if (x < 0) {
-                textClicks.setTextColor(Color.RED)
-            } else {
-                textClicks.setTextColor(Color.BLUE)
+            try {
+                //textClicks.text = user.getKeys()
+                textKeys?.text = user.getKeys().toString().replace("[", "").replace("]", "");
+            } catch (e: NullPointerException) {
+                e.printStackTrace()
             }
 
-            /*val x = Int(etv.getText().toString())
-            val y = Int(etv2.getText().toString())
-            val sub = x - y
-            result.setText("The ANS of $x - $y = $sub")*/
+
         }
     }
 

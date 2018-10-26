@@ -31,28 +31,28 @@ class AppIntroActivity : AppIntro() {
 
         val slideOneTitle = getString(R.string.intro_multi_site_title) as String
         val slideOneDes = getString(R.string.intro_multi_site_desc) as String
-        val slideOneImage: Int =  R.drawable.ic_multi_sites as Int
+        val slideOneImage: Int = R.drawable.ic_multi_sites as Int
         val slideOneBg = ContextCompat.getColor(this, R.color.intro_multi_site_bg)
 
         //add slide
-        addSlide(AppIntroFragment.newInstance(slideOneTitle , slideOneDes,slideOneImage ,slideOneBg));
+        addSlide(AppIntroFragment.newInstance(slideOneTitle, slideOneDes, slideOneImage, slideOneBg));
 
 
         val slideTwoTitle = getString(R.string.intro_sitemap_title) as String
-         val slideTwoDes = getString(R.string.intro_sitemap_desc) as String
-         val slidTwoImage: Int =  R.drawable.ic_sitemap as Int
-         val slideTwoBg = ContextCompat.getColor(this, R.color.intro_sitemap_bg)
+        val slideTwoDes = getString(R.string.intro_sitemap_desc) as String
+        val slidTwoImage: Int = R.drawable.ic_sitemap as Int
+        val slideTwoBg = ContextCompat.getColor(this, R.color.intro_sitemap_bg)
 
         //add slide
-        addSlide(AppIntroFragment.newInstance(slideTwoTitle , slideTwoDes,slidTwoImage ,slideTwoBg));
+        addSlide(AppIntroFragment.newInstance(slideTwoTitle, slideTwoDes, slidTwoImage, slideTwoBg));
 
         val slideThreeTitle = getString(R.string.intro_analytics_title) as String
         val slideThreeDes = getString(R.string.intro_analytics_desc) as String
-        val slideThreeImage: Int =  R.drawable.ic_analytics as Int
+        val slideThreeImage: Int = R.drawable.ic_analytics as Int
         val slideThreeBg = ContextCompat.getColor(this, R.color.intro_analytics_bg)
 
         //add slide
-        addSlide(AppIntroFragment.newInstance(slideThreeTitle , slideThreeDes,slideThreeImage ,slideThreeBg));
+        addSlide(AppIntroFragment.newInstance(slideThreeTitle, slideThreeDes, slideThreeImage, slideThreeBg));
 
 
         setVibrate(true);
@@ -60,9 +60,9 @@ class AppIntroActivity : AppIntro() {
     }//end
 
     override fun onResume() {
-        val introCompleted :Any? = getSharedPref(this, "intro_completed")
+        val introCompleted: Any? = getSharedPref(this, "intro_completed")
 
-        if(introCompleted == true){
+        if (introCompleted == true) {
             closeIntro(false)
         }
         super.onResume()
@@ -71,7 +71,7 @@ class AppIntroActivity : AppIntro() {
     /**
      * onBackPressed
      */
-    override fun onBackPressed(){
+    override fun onBackPressed() {
         //minimize the app
         minimizeApp(this)
     }//end on back pressed
@@ -81,7 +81,7 @@ class AppIntroActivity : AppIntro() {
      * onSkipPressed
      * @currentFragment
      */
-     override  fun  onSkipPressed(currentFargment: Fragment){
+    override fun onSkipPressed(currentFargment: Fragment) {
         super.onSkipPressed(currentFargment)
 
         //close the intro
@@ -93,7 +93,7 @@ class AppIntroActivity : AppIntro() {
      * onDonePressed
      * @param currentFragment
      */
-    override fun onDonePressed(currentFragment: Fragment){
+    override fun onDonePressed(currentFragment: Fragment) {
         super.onDonePressed(currentFragment)
 
         //close the intro
@@ -103,9 +103,9 @@ class AppIntroActivity : AppIntro() {
     /**
      * openLoginActivity
      */
-    fun closeIntro(updateDB: Boolean = true){
+    fun closeIntro(updateDB: Boolean = true) {
 
-        if(updateDB == true) {
+        if (updateDB == true) {
             //lets update status that user has finished intro
             saveSharedPref(this, "intro_completed", true)
         }

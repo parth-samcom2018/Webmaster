@@ -1,7 +1,7 @@
 package com.digitalmid.seograph_webmasters_tool
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 
 class AboutActivity : AppCompatActivity() {
 

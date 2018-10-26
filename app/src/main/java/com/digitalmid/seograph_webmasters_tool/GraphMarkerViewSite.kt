@@ -14,16 +14,15 @@ import com.google.api.services.webmasters.model.UrlCrawlErrorCountsPerType
 class GraphMarkerViewSite(val ctx: Context,
                           val layoutRes: Int = R.layout.graph_marker_view_site_error,
                           val xAxisDates: ArrayList<String>,
-                          val dataSet: MutableList<UrlCrawlErrorCountsPerType>):
+                          val dataSet: MutableList<UrlCrawlErrorCountsPerType>) :
 
-        MarkerView(ctx,layoutRes){
+        MarkerView(ctx, layoutRes) {
 
     val timeStamp: TextView = findViewById<TextView>(R.id.timestamp)
     val count: TextView = findViewById<TextView>(R.id.count)
     val category: TextView = findViewById<TextView>(R.id.category)
 
     var mOffset: MPPointF? = null
-
 
 
     /**
@@ -52,7 +51,7 @@ class GraphMarkerViewSite(val ctx: Context,
     fun screenSize(): Display {
 
         val display: Display = (ctx as Activity).windowManager.defaultDisplay
-        val size: Point =  Point();
+        val size: Point = Point();
         display.getSize(size);
 
         return display

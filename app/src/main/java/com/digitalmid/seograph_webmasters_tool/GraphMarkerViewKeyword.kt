@@ -14,9 +14,9 @@ import com.google.api.services.webmasters.model.ApiDataRow
 class GraphMarkerViewKeyword(val ctx: Context,
                              val layoutRes: Int = R.layout.graph_marker_view_keyword,
                              val xAxisDates: ArrayList<String>,
-                             val dataSet: MutableList<ApiDataRow>):
+                             val dataSet: MutableList<ApiDataRow>) :
 
-        MarkerView(ctx,layoutRes){
+        MarkerView(ctx, layoutRes) {
 
     val date: TextView = findViewById<TextView>(R.id.date)
     val clicks: TextView = findViewById<TextView>(R.id.clicks)
@@ -25,7 +25,6 @@ class GraphMarkerViewKeyword(val ctx: Context,
     val position: TextView = findViewById<TextView>(R.id.position)
 
     var mOffset: MPPointF? = null
-
 
 
     /**
@@ -66,7 +65,7 @@ class GraphMarkerViewKeyword(val ctx: Context,
     fun screenSize(): Display {
 
         val display: Display = (ctx as Activity).windowManager.defaultDisplay
-        val size: Point =  Point();
+        val size: Point = Point();
         display.getSize(size);
 
         return display

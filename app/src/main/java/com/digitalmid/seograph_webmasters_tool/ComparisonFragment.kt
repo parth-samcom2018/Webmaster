@@ -33,9 +33,6 @@ import com.google.api.services.webmasters.model.ApiDataRow
 import com.google.api.services.webmasters.model.SearchAnalyticsQueryResponse
 import kotlinx.android.synthetic.main.fragment_comparison.*
 import org.json.JSONObject
-import retrofit.Callback
-import retrofit.RetrofitError
-import retrofit.client.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -46,6 +43,7 @@ import kotlin.collections.ArrayList
  */
 class ComparisonFragment : Fragment() {
 
+    private var analyticsModel: List<AnalyticsModel> = Vector<AnalyticsModel>()
     private lateinit var mInterstitialAd: InterstitialAd
 
     var counter: Int = 0
@@ -58,6 +56,12 @@ class ComparisonFragment : Fragment() {
     var rcView: RecyclerView? = null
     var adapter1: CompareAdapter? = null
     var tv_date: TextView? = null
+
+    var listView: ListView? = null
+    private var arrayAdapter: ArrayAdapter<AnalyticsModel>? = null
+    private var analytics: List<AnalyticsModel> = Vector<AnalyticsModel>() //empty
+
+    private var checkBox: CheckedTextView? = null
 
     //second list for 7 days old
     var rcViewOld: RecyclerView? = null
@@ -82,10 +86,6 @@ class ComparisonFragment : Fragment() {
     //first filter
     val filterDialog: AppCompatDialog by lazy {
         initFilterDialog()
-    }
-
-    val elementsDialog: AppCompatDialog by lazy {
-        initElementsDialog()
     }
 
     //second filter
@@ -229,10 +229,6 @@ class ComparisonFragment : Fragment() {
                     filterDialog.show()
                 }
 
-        fragView.findViewById<AppCompatImageButton>(R.id.toggle_compare)
-                .setOnClickListener {
-                    elementsDialog.show()
-                }
 
         //second filter for comparison
         /*fragView
@@ -1285,22 +1281,16 @@ class ComparisonFragment : Fragment() {
                 //dummyPieChart(results)
             }
 
-            /*if (queryGroups.contains("clicks")) {
-                drawLineGraphclicks(results)
-            }
-
-            if (queryGroups.contains("ctr")) {
-                drawLineGraphctr(results)
-            }
-
-            if (queryGroups.contains("position")) {
-                drawLineGraphposition(results)
-            }
-
-            if (queryGroups.contains("impressions")) {
-                drawLineGraphimpr(results)
-            }*/
         }
+
+
+        Log.d(TAG, "startdate : " + startDate.time.toString())
+        Log.d(TAG, "endDate : " + endDate.time.toString())
+        Log.d(TAG, "url : " + siteUrl)
+        Log.d(TAG, "startdate : " + startDateOld.time.toString())
+        Log.d(TAG, "endDate : " + endDateOld.time.toString())
+        Log.d(TAG, "query : " + queryGrouping.toString().replace("[", "").replace("]", ""))
+
 
         //hide spinner and show contents
         loadingIndicator.visibility = View.GONE
@@ -1319,32 +1309,6 @@ class ComparisonFragment : Fragment() {
 
         rcViewOld?.adapter = adapterOld
         adapterOld?.notifyDataSetChanged()
-
-        Log.d(TAG, "startdate : " + startDate.time.toString())
-        Log.d(TAG, "endDate : " + endDate.time.toString())
-        Log.d(TAG, "url : " + siteUrl)
-        Log.d(TAG, "startdate : " + startDateOld.time.toString())
-        Log.d(TAG, "endDate : " + endDateOld.time.toString())
-        Log.d(TAG, "query : " + queryGrouping.toString().replace("[","").replace("]",""))
-
-
-        /*DM().getApi().getAnalyticsClicks(startDate.time.toString()!!,
-                endDate.time.toString(),
-                siteUrl,
-                startDateOld!!.time.toString(),
-                endDateOld!!.time.toString(),
-                queryGrouping.toString().replace("[","").replace("]",""),
-                object : Callback<Response> {
-                    override fun success(t: Response?, response: Response?) {
-                        Toast.makeText(mContext, "Successfully add data",Toast.LENGTH_SHORT).show()
-
-                    }
-
-                    override fun failure(error: RetrofitError?) {
-                        Toast.makeText(mContext,"Failed to upload" ,Toast.LENGTH_SHORT).show()
-                    }
-
-                })*/
 
 
 
@@ -1381,6 +1345,23 @@ class ComparisonFragment : Fragment() {
         })
 
     }
+
+    /*private fun getdata(): MutableList<AnalyticsModel> {
+        val cb = object : Callback<AnalyticsRes> {
+            override fun success(ns: AnalyticsRes, response: Response) {
+                analytics = ns.data
+                arrayAdapter?.notifyDataSetChanged()
+                Log.d("get", "on: " + ns.data)
+            }
+
+            override fun failure(error: RetrofitError) {
+                Log.d("get", "off: " + error)
+            }
+        }
+
+
+        return getdata()
+    }*/
 
 
     @SuppressLint("ResourceType")
@@ -1732,9 +1713,6 @@ class ComparisonFragment : Fragment() {
                 drawLineGraphimpr(results)
             }*/
         }//end if not null
-
-
-
 
 
         //hide spinner and show contents
@@ -3281,81 +3259,15 @@ class ComparisonFragment : Fragment() {
         return dialog
     }//emd
 
-    fun initElementsDialog(): AppCompatDialog {
-        val dialog = AppCompatDialog(mContext)
-
-        //set the view
-        dialog.setContentView(R.layout.compare_elements_dialog)
-
-        //set window width to fit
-        dialog!!.window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.WRAP_CONTENT)
-
-
-        //close dialog
-        dialog
-                .findViewById<AppCompatButton>(R.id.close_dialog)
-                ?.setOnClickListener {
-                    //dismiss
-                    dialog.dismiss()
-                }//end close dialog
-
-        //groups ids
-        val elementsId = listOf<Int>(
-                R.id.tv_clicks_compare,
-                R.id.tv_ctr_compare,
-                R.id.tv_position_compare,
-                R.id.tv_impression_compare
-        )//end group ids
-
-        //save grouping
-        dialog
-                .findViewById<AppCompatButton>(R.id.save_grouping)
-                ?.setOnClickListener {
-
-                    //clear current groupings
-                    queryGroups.clear()
-
-                    //always add date
-                    //queryGrouping.add("date")
-
-                    //lets get grouping
-                    for (elementsforGroupID in elementsId) {
-
-                        val checkbox = dialog
-                                .findViewById<AppCompatCheckBox>(elementsforGroupID)
-
-
-                        //if checked add it
-                        if (checkbox!!.isChecked) {
-                            queryGroups.add(checkbox.tag.toString())
-                            Toast.makeText(mContext, "" + checkbox.tag.toString(), Toast.LENGTH_SHORT).show()
-                            //end if
-                        }
-
-                        //Toast.makeText(mContext, "" + checkbox.tag.toString(),Toast.LENGTH_SHORT).show()
-
-                    } //end for loop
-
-                    //dismiss
-                    dialog.dismiss()
-
-                    //let proccess starts
-                    proccessStats(0, true)
-                } //end save grouping onClick
-
-        return dialog
-    }
 
     //proccess group stats
     fun proccessGroupResults(): AppCompatDialog {
-
 
         //init dialog
         val dialog = AppCompatDialog(mContext)
 
         //set the view
-        dialog.setContentView(R.layout.group_analytics_dialog)
+        dialog.setContentView(R.layout.group_compare_dialog)
 
         //set window width to fit
         dialog!!.window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
@@ -3374,8 +3286,8 @@ class ComparisonFragment : Fragment() {
         val groupsId = listOf<Int>(
                 R.id.date,
                 R.id.keywords,
-                R.id.countries,
-                R.id.devices,
+                /*R.id.countries,
+                R.id.devices,*/
                 R.id.pages
         )//end group ids
 
@@ -3395,8 +3307,7 @@ class ComparisonFragment : Fragment() {
                     for (groupId in groupsId) {
 
                         val checkbox = dialog
-                                .findViewById<AppCompatCheckBox>(groupId)
-
+                                .findViewById<AppCompatRadioButton>(groupId)
 
                         //if checked add it
                         if (checkbox!!.isChecked) {
@@ -3404,7 +3315,9 @@ class ComparisonFragment : Fragment() {
                             //end if
                         }
 
-                    } //end for loop
+
+                    }
+                    //end for loop
 
                     //dismiss
                     dialog.dismiss()

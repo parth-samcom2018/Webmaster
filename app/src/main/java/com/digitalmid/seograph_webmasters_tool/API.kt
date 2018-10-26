@@ -5,7 +5,6 @@ import retrofit.client.Response
 import retrofit.http.Field
 import retrofit.http.FormUrlEncoded
 import retrofit.http.POST
-import java.util.*
 
 public interface API {
 
@@ -41,6 +40,7 @@ public interface API {
                       callback: Callback<Response>)
 
 
+    @FormUrlEncoded
     @POST("/api/getAnalyticsClicks")
     fun getAnalyticsClicks(@Field("firstDate") firstDate: String,
                            @Field("secondDate") secondDate: String,
@@ -48,6 +48,8 @@ public interface API {
                            @Field("thirdDate") thirdDate: String,
                            @Field("fourDate") fourDate: String,
                            @Field("groupBy") groupBy: String,
+                           @Field("keyword") keyword: String,
                            callback: Callback<Response>)
+
 
 }
