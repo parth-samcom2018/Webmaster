@@ -5,6 +5,7 @@ import retrofit.client.Response
 import retrofit.http.Field
 import retrofit.http.FormUrlEncoded
 import retrofit.http.POST
+import java.util.*
 
 public interface API {
 
@@ -49,7 +50,7 @@ public interface API {
                            @Field("fourDate") fourDate: String,
                            @Field("groupBy") groupBy: String,
                            @Field("keyword") keyword: String,
-                           callback: Any)
+                           callback: Callback<Response>)
 
 
 }

@@ -3,8 +3,10 @@ package com.digitalmid.seograph_webmasters_tool
 import android.app.Activity
 import android.content.Context
 import android.graphics.Point
+import android.util.Log
 import android.view.Display
 import android.widget.TextView
+import android.widget.Toast
 import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
@@ -44,6 +46,7 @@ class GraphMarkerSitemap(val ctx: Context,
             val submittedFloat = "Submitted: ${dataRow.contents[0].submitted}"
             val indexedValue = "Indexed1: ${dataRow.contents.get(1).indexed}"
             val submittedValue = "Submitted1: ${dataRow.contents.get(1).submitted}"
+
 
             //set date
             //date.text = dateText

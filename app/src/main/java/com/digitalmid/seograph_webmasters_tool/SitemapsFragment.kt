@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -271,25 +272,38 @@ class SitemapsFragment : Fragment() {
 
         val results = results.sitemap
 
+        if (!results.isEmpty() || results.size.toString().contains("")) {
+
+        }
+
         //barChartIndexDataSet = java.util.ArrayList<BarEntry>()
+
+        /*if (!results.isEmpty()) {
+            barChartIndexDataSet.add(BarEntry(results.get(0).contents.get(0).indexed.toFloat(), results.get(0).contents.get(0).submitted.toFloat()))
+            barChartIndexDataSet.add(BarEntry(results.get(0).contents.get(1).indexed.toFloat(), results.get(0).contents.get(1).submitted.toFloat()))
+            barChartIndexDataSet.add(BarEntry(results.get(1).contents.get(0).indexed.toFloat(), results.get(1).contents.get(0).submitted.toFloat()))
+            barChartIndexDataSet.add(BarEntry(results.get(1).contents.get(1).indexed.toFloat(), results.get(1).contents.get(1).submitted.toFloat()))
+        }*/
 
         try {
             try {
-                if (results.size.toString().isNotEmpty() || results.size.toString().isNullOrBlank()) {
+                if (results.size.toString().contains("contents") || !results.isEmpty()) {
 
-                    barChartIndexDataSet.add(BarEntry(results.get(0).contents.get(0).indexed.toFloat(), results.get(0).contents[0].submitted.toFloat()))
+                    barChartIndexDataSet.add(BarEntry(results.get(0).contents.get(0).indexed.toFloat(), results.get(0).contents.get(0).submitted.toFloat()))
                     barChartSubmitDataSet.add(BarEntry(results.get(0).contents.get(1).indexed.toFloat(), results.get(0).contents.get(1).submitted.toFloat()))
                     barChartIndexValueSet.add(BarEntry(results.get(1).contents.get(0).indexed.toFloat(), results.get(1).contents.get(0).submitted.toFloat()))
                     barChartSubmitValueSet.add(BarEntry(results.get(1).contents.get(1).indexed.toFloat(), results.get(1).contents.get(1).submitted.toFloat()))
                 }
+
             } catch (e: java.lang.IndexOutOfBoundsException) {
                 e.printStackTrace()
             }
 
-            barChartIndexDataSet.add(BarEntry(results.get(0).contents.get(0).indexed.toFloat(), results.get(0).contents[0].submitted.toFloat()))
+            barChartIndexDataSet.add(BarEntry(results.get(0).contents.get(0).indexed.toFloat(), results.get(0).contents.get(0).submitted.toFloat()))
             barChartSubmitDataSet.add(BarEntry(results.get(0).contents.get(1).indexed.toFloat(), results.get(0).contents.get(1).submitted.toFloat()))
             barChartIndexValueSet.add(BarEntry(results.get(1).contents.get(0).indexed.toFloat(), results.get(1).contents.get(0).submitted.toFloat()))
             barChartSubmitValueSet.add(BarEntry(results.get(1).contents.get(1).indexed.toFloat(), results.get(1).contents.get(1).submitted.toFloat()))
+
         } catch (e: IndexOutOfBoundsException) {
             e.printStackTrace()
         }
@@ -310,6 +324,8 @@ class SitemapsFragment : Fragment() {
                 ctx = mContext,
                 xAxisDates = xAxisLabels,
                 dataSet = results)
+
+        //Toast.makeText(mContext, "" +results.toString(),Toast.LENGTH_LONG).show()
 
         Log.e("SitemapLabels", varDump(xAxisLabels))
 

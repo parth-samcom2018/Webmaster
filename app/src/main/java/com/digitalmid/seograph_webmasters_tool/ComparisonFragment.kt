@@ -33,6 +33,9 @@ import com.google.api.services.webmasters.model.ApiDataRow
 import com.google.api.services.webmasters.model.SearchAnalyticsQueryResponse
 import kotlinx.android.synthetic.main.fragment_comparison.*
 import org.json.JSONObject
+import retrofit.Callback
+import retrofit.RetrofitError
+import retrofit.client.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -325,6 +328,27 @@ class ComparisonFragment : Fragment() {
         /*statDateViewOld.setOnClickListener {
             statsDateDialogOld.show()
         }*/
+
+
+        /*DM().getApi().getAnalyticsClicks(startDate?.time.toString(),
+                endDate?.time.toString(),
+                siteUrl,
+                startDateOld?.time.toString(),
+                endDateOld.time.toString(),
+                queryGrouping.toString().replace("[", "").replace("]", ""),
+                queryFilter.toString(),
+                object: Callback<Response> {
+                    override fun success(t: Response?, response: Response?) {
+                        Log.d(TAG, "onChange: " + response.toString())
+                        Log.d(TAG, "onChange: " + t.toString())
+                    }
+
+                    override fun failure(error: RetrofitError?) {
+                        Log.d(TAG, "onFailed: " + error)
+                    }
+
+                })*/
+
 
 
 
@@ -1289,6 +1313,7 @@ class ComparisonFragment : Fragment() {
         Log.d(TAG, "startdate : " + startDateOld.time.toString())
         Log.d(TAG, "endDate : " + endDateOld.time.toString())
         Log.d(TAG, "query : " + queryGrouping.toString().replace("[", "").replace("]", ""))
+        Log.d(TAG, "filter : " + queryFilter.toString())
 
 
         //hide spinner and show contents
@@ -1308,6 +1333,45 @@ class ComparisonFragment : Fragment() {
 
         rcViewOld?.adapter = adapterOld
         adapterOld?.notifyDataSetChanged()
+
+        /*listView = contentsView.findViewById<ListView>(R.id.list)
+
+        val analyticsModel = AnalyticsModel()
+
+        analyticsModel.firstDate = startDate?.time
+        analyticsModel.secondDate = endDate?.time
+        analyticsModel.websiteURL = siteUrl
+        analyticsModel.thirdDate = startDateOld?.time
+        analyticsModel.fourDate = endDateOld?.time
+        analyticsModel.groupBy = queryGrouping.toString().replace("[", "").replace("]", "")
+        analyticsModel.keyword = queryFilter.toString()
+
+
+        arrayAdapter = object : ArrayAdapter<AnalyticsModel>(this.context, R.layout.compare_one) {
+
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                var convertView = convertView
+
+                if (convertView == null) {
+                    convertView = LayoutInflater.from(this@ComparisonFragment.getContext()).inflate(R.layout.compare_one, parent, false)
+                }
+
+                val e = analytics.get(position)
+
+                val titleTV = convertView!!.findViewById<TextView>(R.id.tvClicks)
+                titleTV.setText(e.diff!!)
+
+                return convertView
+            }
+
+            override fun getCount(): Int {
+                return analytics.size
+            }
+        }
+        listView?.setAdapter(arrayAdapter)*/
+
+
+
 
 
         rcViewOld?.setOnTouchListener(object : View.OnTouchListener {
@@ -1585,6 +1649,7 @@ class ComparisonFragment : Fragment() {
                     Log.e("clicks", results.toString())
                 } else {
                     //Toast.makeText(mContext, "Please select any elements to view in chart", Toast.LENGTH_SHORT).show()
+
                     contentsView.visibility = View.GONE
                     emptyResponseView.visibility = View.VISIBLE
                 }
@@ -1696,21 +1761,6 @@ class ComparisonFragment : Fragment() {
             }//end if group by device
 
 
-            /*if (queryGroups.contains("clicks")) {
-                drawLineGraphclicks(results)
-            }
-
-            if (queryGroups.contains("ctr")) {
-                drawLineGraphctr(results)
-            }
-
-            if (queryGroups.contains("position")) {
-                drawLineGraphposition(results)
-            }
-
-            if (queryGroups.contains("impressions")) {
-                drawLineGraphimpr(results)
-            }*/
         }//end if not null
 
 
@@ -1730,7 +1780,6 @@ class ComparisonFragment : Fragment() {
 
         rcView?.adapter = adapter1
         adapter1?.notifyDataSetChanged()
-
 
 
         rcView?.setOnTouchListener(object : View.OnTouchListener {

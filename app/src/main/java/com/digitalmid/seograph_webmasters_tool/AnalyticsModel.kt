@@ -9,6 +9,7 @@ public class AnalyticsModel {
     var thirdDate: Date? = null
     var fourDate: Date? = null
     var groupBy: String? = null
+    var keyword: String? = null
     var clicks: String? = null
     var date: String? = null
     var diff: Int? = null
