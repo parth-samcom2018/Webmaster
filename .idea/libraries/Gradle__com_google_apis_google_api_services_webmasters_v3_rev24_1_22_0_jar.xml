@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.google.apis:google-api-services-webmasters:v3-rev24-1.22.0@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.apis/google-api-services-webmasters/v3-rev24-1.22.0/9df19af41f2bc006b3d7b082b35483c5e58d54da/google-api-services-webmasters-v3-rev24-1.22.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.apis/google-api-services-webmasters/v3-rev24-1.22.0/b0b1239a913fd2bf46313508ac3e3f1e56e4aeac/google-api-services-webmasters-v3-rev24-1.22.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

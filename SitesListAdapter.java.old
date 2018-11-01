@@ -1,0 +1,79 @@
+package com.digitalmid.seograph_webmasters_tool;
+
+import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+/**
+ * Created by dr_success on 7/22/2017.
+ */
+
+public class SitesListAdapter extends ArrayAdapter<Map<String,String>>{
+
+    Context context;
+    int layoutResourceId;
+
+    ArrayList<Map<String,String>> listValues;
+
+    public SitesListAdapter(Context context,
+                            int layoutResourceId,
+                            ArrayList<Map<String,String>> listValues){
+        super(context,layoutResourceId,listValues);
+
+        //initialize vars
+        this.context = context;
+        this.layoutResourceId = layoutResourceId;
+        this.listValues = listValues;
+
+    }//end constructor
+
+
+/**
+ * getView
+ */
+    @Override
+    public View getView(int position,
+                        View convertView,
+                        ViewGroup parent){
+
+        View listRow = convertView;
+
+        //if the listRow is null create it
+        if(listRow == null){
+            listRow = LayoutInflater.from(this.context)
+                                    .inflate(
+                                            this.layoutResourceId,
+                                            parent,
+                                            false
+                                    );
+
+        }//end get layout file
+
+        //get details of layout
+        TextView siteUrlTextView = (TextView) listRow
+                                              .findViewById(R.id.site_url);
+
+
+        Map listRowValues = this.listValues.get(position);
+
+        //site url
+        String siteUrl = String.valueOf(listRowValues.get("site_url"));
+
+        Log.e("LOLBoom",siteUrl);
+
+        //set the Text
+        siteUrlTextView.setText(siteUrl);
+
+        return listRow;
+    }//end
+
+
+}//end class
