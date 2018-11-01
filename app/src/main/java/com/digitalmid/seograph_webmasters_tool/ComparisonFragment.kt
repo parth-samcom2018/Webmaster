@@ -1171,7 +1171,7 @@ class ComparisonFragment : Fragment() {
                             object : Callback<ChangeResponse> {
                                 override fun success(t: ChangeResponse?, response: Response?) {
 
-                                    //changenames = t?.currentweek!!
+                                    changenames = t?.currentweek!!
 
 
                                     Log.d(TAG, "clicks: " + checkbox_clicks.tag.toString())
