@@ -3,6 +3,7 @@ package com.digitalmid.seograph_webmasters_tool
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.provider.Settings
@@ -39,6 +40,8 @@ class AuthActivity : AppCompatActivity(),
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+    val MYPref = "Pref"
+    lateinit var sPref: SharedPreferences
     //val googleApiClient: GoogleApiClient?
     val RC_SIGN_IN = 100
 
@@ -47,6 +50,7 @@ class AuthActivity : AppCompatActivity(),
     lateinit var googleApiClient: GoogleApiClient
 
     var unique_id: String? = null
+    var oldToken: String? = null
     var mContext: Context
 
     //set access token to null
@@ -85,6 +89,7 @@ class AuthActivity : AppCompatActivity(),
             signIn()
         }//end on Click
 
+        sPref = getSharedPreferences(MYPref, MODE_PRIVATE)
 
     }//end onCreate
 
@@ -207,10 +212,6 @@ class AuthActivity : AppCompatActivity(),
         }//end if
 
 
-        if (googleAccessTokenResponse?.refreshToken == null) {
-            //longToast("Refresh Token ${googleAccessTokenResponse?.refreshToken.toString()}")
-
-        }
 
         //insert data
         var userInfoObj: JSONObject = JSONObject()
@@ -221,6 +222,7 @@ class AuthActivity : AppCompatActivity(),
 
         var tokenExpiry: Long = googleAccessTokenResponse?.expiresInSeconds!!.toLong()
 
+        
         //insert data into json object
         userInfoObj.put("display_name", account?.displayName)
         userInfoObj.put("email", account?.email)
@@ -233,42 +235,26 @@ class AuthActivity : AppCompatActivity(),
         userInfoObj.put("id_token", googleAccessTokenResponse?.idToken)
         userInfoObj.put("id_token", account?.grantedScopes)
 
+        val preferences = getSharedPreferences(MYPref, Context.MODE_PRIVATE)
+        val editor = preferences.edit()
+        editor.putString("autoSave", oldToken)
+        editor.apply()
+
+
+        Log.d("onrefresh", "token : " + sPref.getString("autoSave",""))
+        Log.d("onrefresh", "token : " + refreshToken)
+
+
         Log.e("jsondata", userInfoObj.toString())
 
+
         //lets save the data to shared pref
+
         saveSharedPref(this, "user_info", userInfoObj.toString())
 
         unique_id = Settings.Secure.getString(applicationContext.contentResolver, Settings.Secure.ANDROID_ID)
 
         Log.d("info", userInfoObj.toString())
-
-
-        /*val loginmodel = LoginModel()
-
-        loginmodel.accountID = account?.id
-        loginmodel.userName = account?.displayName
-        loginmodel.email = account?.email
-        loginmodel.userDeviceModel = unique_id
-        loginmodel.websiteURL = null
-        loginmodel.serverAuthCode = authCode
-        loginmodel.idToken = account?.idToken
-        loginmodel.profilePicUrl = account?.photoUrl.toString()
-        loginmodel.accessToken = accessToken
-        loginmodel.refreshToken = refreshToken
-        loginmodel.tokenExpiry = tokenExpiry.toString()
-        loginmodel.googleAccessTokenResponse = googleAccessTokenResponse?.idToken*/
-
-
-        /*DM().getApi().postData(DM().getAuthString(),
-                loginmodel, object : Callback<Response> {
-            override fun success(t: Response?, response: Response?) {
-                Toast.makeText(mContext, "Successfully add data",Toast.LENGTH_SHORT).show()
-            }
-
-            override fun failure(error: RetrofitError?) {
-                Toast.makeText(mContext,"Failed to upload" ,Toast.LENGTH_SHORT).show()
-            }
-        })*/
 
 
         DM().getApi().postData(account?.id!!.toString(),
@@ -277,47 +263,29 @@ class AuthActivity : AppCompatActivity(),
                 unique_id!!,
                 authCode!!,
                 googleAccessTokenResponse?.idToken.toString(),
-                "null",
+                account?.photoUrl.toString(),
                 accessToken,
-                refreshToken!!,
+                refreshToken,
                 tokenExpiry.toString(),
-                userInfoObj!!.toString(),
-                googleAccessTokenResponse?.idToken.toString(),
+                googleAccessTokenResponse.toString(),
+                googleAccessTokenResponse?.accessToken?.toString()!!,
                 object : Callback<Response> {
                     override fun success(t: Response?, response: Response?) {
-                        //Toast.makeText(mContext, "Successfully add data",Toast.LENGTH_SHORT).show()
-                        Log.d("onsuccess", "id :" + account?.id)
-                        Log.d("onsuccess", "name :" + account?.displayName)
-                        Log.d("onsuccess", "email :" + account?.email)
-                        Log.d("onsuccess", "deviceid :" + unique_id)
-                        Log.d("onsuccess", "auth :" + authCode)
-                        Log.d("onsuccess", "photo :" + account?.photoUrl)
-                        Log.d("onsuccess", "accestoken :" + accessToken)
-                        Log.d("onsuccess", "refreshtoken :" + refreshToken)
-                        Log.d("onsuccess", "info :" + userInfoObj.toString())
+                        Log.d("onRes", "data: " + response)
+                        Log.d("onRes", "data: " + refreshToken)
                     }
 
                     override fun failure(error: RetrofitError?) {
                         Toast.makeText(mContext, "Failed to upload", Toast.LENGTH_SHORT).show()
+                        Log.d("onRes", "data: " + error)
                     }
 
                 })
 
 
-        /*Log.d("data", "googleIdtoken :" + googleAccessTokenResponse?.idToken.toString())
-        Log.d("data", "authcode :" + authCode)
-        Log.d("data", "accesstoken :" + accessToken)
-        Log.d("data", "refreshtoken :" + refreshToken)
-        Log.d("data", "name :" + account?.displayName)
-        Log.d("data", "email :" + account?.email)
-        Log.d("data", "accountID :" + account?.id)
-        Log.d("data", "authcode :" + authCode)
-        Log.d("data", "url :" + account?.photoUrl.toString())
-        Log.d("data", "tokenexpiry :" + tokenExpiry.toString())
-        Log.d("data", "device id :" + unique_id)*/
-
         //greet user
         longToast("Hello ${account?.displayName}")
+
 
 
         //Toast.makeText(mContext , "" + googleAccessTokenResponse,Toast.LENGTH_SHORT).show()
@@ -327,9 +295,6 @@ class AuthActivity : AppCompatActivity(),
         dialog.dismiss()
 
 
-        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val editor = preferences.edit()
-        editor.putString("googledata", account?.email)
 
         //lets now open sites list and close this activity
         startActivity(

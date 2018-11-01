@@ -2,8 +2,10 @@ package com.digitalmid.seograph_webmasters_tool
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
@@ -12,13 +14,15 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 
 /**
  * Created by dr_success on 8/12/2017.
  */
 open class DrawerActivity : AppCompatActivity() {
 
-
+    val MYPref = "Pref"
+    lateinit var sPref: SharedPreferences
     //lazy init vals
     private val toolbar: Toolbar by lazy {
         findViewById<Toolbar>(R.id.toolbar)
@@ -65,6 +69,9 @@ open class DrawerActivity : AppCompatActivity() {
         navView.setNavigationItemSelectedListener({ item: MenuItem ->
             onNavItemSelected(item)
         })
+
+        sPref = getSharedPreferences(MYPref, MODE_PRIVATE)
+
     }//end
 
     //on NavItemSelected
@@ -93,6 +100,11 @@ open class DrawerActivity : AppCompatActivity() {
             startActivity(Intent(applicationContext, itemActivity))
         } else if (itemId == R.id.revoke_access) {
             removeUserInfo(this)
+
+            val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+            val editor = preferences.edit()
+            editor.remove("autoSave")
+            editor.apply()
         }
 
         //close drawer

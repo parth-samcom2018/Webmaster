@@ -1,10 +1,10 @@
 package com.digitalmid.seograph_webmasters_tool
 
+import com.digitalmid.seograph_webmasters_tool.com.digitalmid.seograph_webmasters_tool.AnalyticsModel
+import com.digitalmid.seograph_webmasters_tool.com.digitalmid.seograph_webmasters_tool.ChangeResponse
 import retrofit.Callback
 import retrofit.client.Response
-import retrofit.http.Field
-import retrofit.http.FormUrlEncoded
-import retrofit.http.POST
+import retrofit.http.*
 import java.util.*
 
 public interface API {
@@ -24,7 +24,6 @@ public interface API {
                  @Field("tokenExpiry") tokenExpiry: String,
                  @Field("jsontoken") jsontoken: String,
                  @Field("googleAccessTokenResponse") googleAccessTokenResponse: String,
-
                  callback: Callback<Response>)
 
 
@@ -40,17 +39,17 @@ public interface API {
                       @Field("websiteURL") websiteURL: String,
                       callback: Callback<Response>)
 
-
     @FormUrlEncoded
     @POST("/api/getAnalyticsClicks")
     fun getAnalyticsClicks(@Field("firstDate") firstDate: String,
                            @Field("secondDate") secondDate: String,
-                           @Field("websiteURL") websiteURL: String,
+                           @Field("websiteURL") url: String,
                            @Field("thirdDate") thirdDate: String,
                            @Field("fourDate") fourDate: String,
                            @Field("groupBy") groupBy: String,
+                           @Field("elementsBy") elementsBy: String,
                            @Field("keyword") keyword: String,
-                           callback: Callback<Response>)
+                           callback: Callback<ChangeResponse>)
 
 
 }

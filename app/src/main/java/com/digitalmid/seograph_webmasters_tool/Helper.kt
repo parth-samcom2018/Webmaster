@@ -8,6 +8,7 @@ import android.os.Build
 import android.support.v4.util.PatternsCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDialog
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -21,6 +22,7 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
+import org.json.JSONObject
 import java.util.*
 import java.util.regex.Matcher
 
@@ -273,6 +275,7 @@ fun setDrawerHeaderInfo(context: Context, headerView: View) {
 
         val userEmail = userInfo.getString("email")
 
+
         //Log.e("USERDATA", varDump(userInfo))
 
         //set display Name
@@ -284,6 +287,7 @@ fun setDrawerHeaderInfo(context: Context, headerView: View) {
         headerView
                 .findViewById<TextView>(R.id.user_email)
                 .text = userEmail
+
 
         if (userInfo.has("profile_pic_url")) {
 
@@ -304,6 +308,7 @@ fun setDrawerHeaderInfo(context: Context, headerView: View) {
                     .into(profilePicImageView)
 
         }//end if profile pic is available
+
 
 
     }//end if user info is not empty

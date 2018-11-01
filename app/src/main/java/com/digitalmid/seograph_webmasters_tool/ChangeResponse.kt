@@ -1,23 +1,18 @@
-package com.digitalmid.seograph_webmasters_tool
+package com.digitalmid.seograph_webmasters_tool.com.digitalmid.seograph_webmasters_tool
 
-data class ChangeResponse(
-        val error: Boolean,
-        val message: String,
-        val websitedetails: Websitedetails
-) {
-    data class Websitedetails(
-            val currentweek: List<Currentweek>,
-            val diff: List<Int>,
-            val lastweek: List<Lastweek>
-    ) {
-        data class Currentweek(
-                val clicks: String,
-                val date: String
-        )
+import com.google.gson.annotations.SerializedName
+import java.util.ArrayList
 
-        data class Lastweek(
-                val clicks: String,
-                val date: String
-        )
-    }
+class ChangeResponse {
+    @SerializedName("error")
+    var status: String? = null
+
+    @SerializedName("message")
+    var message: String? = null
+
+    @SerializedName("websitedetails")
+    var websitedetails: String? = null
+
+    @SerializedName("currentweek")
+    var currentweek: ArrayList<Analytics>? = null
 }

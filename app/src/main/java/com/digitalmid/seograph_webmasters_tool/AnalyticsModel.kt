@@ -2,7 +2,7 @@ package com.digitalmid.seograph_webmasters_tool.com.digitalmid.seograph_webmaste
 
 import java.util.*
 
-public class AnalyticsModel {
+class AnalyticsModel {
     var firstDate: Date? = null
     var secondDate: Date? = null
     var websiteURL: String? = null

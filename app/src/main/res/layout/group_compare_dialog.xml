@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
             android:tag="country"
-            android:visibility="gone"
+            android:visibility="visible"
             android:text="@string/countries" />
 
         <android.support.v7.widget.AppCompatRadioButton
@@ -49,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/devices"
-            android:visibility="gone"
+            android:visibility="visible"
             android:background="?android:attr/selectableItemBackground" />
 
 

@@ -12,13 +12,17 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.Toast
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.api.services.webmasters.Webmasters
 import com.google.api.services.webmasters.model.SitesListResponse
 import com.google.api.services.webmasters.model.WmxSite
 import com.google.firebase.iid.FirebaseInstanceId
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_sites_list.*
+import kotlinx.android.synthetic.main.nav_header.*
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.runBlocking
 import org.jetbrains.anko.coroutines.experimental.bg
@@ -63,6 +67,7 @@ class SitesListActivity : DrawerActivity(),
             body_text_view.text = bodyMessage
 
             Log.d("firebase", "token: " + token)
+
         }
 
         //lets register the add site dialog
@@ -375,7 +380,6 @@ class SitesListActivity : DrawerActivity(),
         hideResfreshSpinner()
 
         Log.d("siteList", sitesListData.toString())
-
     }//end render sitesList
 
 
