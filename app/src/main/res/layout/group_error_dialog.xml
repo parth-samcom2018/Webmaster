@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/group_by"
+        android:textStyle="normal"
+        android:textSize="12sp"
+        android:padding="10dp" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:tag="notFound"
+        android:id="@+id/tv_notFound"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/not_found"
+        android:checked="true" />
+
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:tag="serverError"
+        android:id="@+id/tv_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/serverError"
+        android:background="?android:attr/selectableItemBackground" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:tag="roboted"
+        android:id="@+id/tv_roboted"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/roboted"
+        android:background="?android:attr/selectableItemBackground" />
+
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:tag="soft404"
+        android:id="@+id/tv_soft404"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/soft404"
+        android:background="?android:attr/selectableItemBackground" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:tag="manyToOneRedirect"
+        android:id="@+id/tv_manyToOneRedirect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/manyToOneRedirect"
+        android:background="?android:attr/selectableItemBackground" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:tag="notFollowed"
+        android:id="@+id/tv_notFollowed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/not_Followed"
+        android:background="?android:attr/selectableItemBackground" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:tag="other"
+        android:id="@+id/tv_other"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/other"
+        android:background="?android:attr/selectableItemBackground" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/close_dialog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel"
+            android:padding="15dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:textColor="@color/colorAccent" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/save_grouping"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ok"
+            android:padding="15dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:textColor="@color/colorAccent" />
+    </LinearLayout>
+
+
+</LinearLayout>

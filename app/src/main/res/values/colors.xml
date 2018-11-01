@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryAlpha">#A63F51B5</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccentAlpha">#A6FF4081</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="intro_sitemap_bg">#6a1b9a</color>
+    <color name="intro_analytics_bg">#F50057</color>
+    <color name="intro_multi_site_bg">#1E88E5</color>
+    <color name="blue_ligthen_5">#e3f2fd</color>
+    <color name="white">#ffffff</color>
+    <color name="blue_grey_ligthen_5">#eceff1</color>
+    <color name="blue_grey_lighten_4">#cfd8dc</color>
+    <color name="blue_grey_lighten_2">#90a4ae</color>
+    <color name="blue_grey_lighten_1">#78909c</color>
+    <color name="blue_darken_1">#1e88e5</color>
+    <color name="green">#4caf50</color>
+    <color name="pink">#e91e63</color>
+    <color name="purple">#9c27b0</color>
+    <color name="red">#f44336</color>
+    <color name="yellow">#f4e136</color>
+    <color name="orange">#FF6D00</color>
+</resources>

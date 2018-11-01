@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.digitalmid.seograph_webmasters_tool.ViewSiteActivity">
+
+
+    <LinearLayout
+        android:id="@+id/ll_touch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:clickable="true">
+
+
+        <include layout="@layout/app_bar" />
+
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true" />
+
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            ads:adSize="SMART_BANNER"
+            android:visibility="gone"
+            ads:adUnitId="ca-app-pub-8019445966160525/8136471519"
+            android:layout_gravity="bottom"></com.google.android.gms.ads.AdView>
+    </LinearLayout>
+
+    <include layout="@layout/navigation_drawer" />
+
+
+</android.support.v4.widget.DrawerLayout>

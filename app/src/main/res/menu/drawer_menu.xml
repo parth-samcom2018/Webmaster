@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sites"
+        android:title="@string/sites"
+        android:icon="@drawable/ic_android_globe" />
+
+    <item
+        android:id="@+id/comparison"
+        android:title="Comparison"
+        android:icon="@drawable/ic_android_globe"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/contact_us"
+        android:title="@string/contact_us"
+        android:icon="@drawable/ic_email" />
+
+    <item
+        android:id="@+id/about"
+        android:title="@string/about"
+        android:icon="@drawable/ic_help_circled" />
+
+    <group
+        android:id="@+id/nav_open_account_group"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/revoke_access"
+            android:title="@string/revoke_access"
+            android:icon="@drawable/ic_android_unlock" />
+    </group>
+</menu>

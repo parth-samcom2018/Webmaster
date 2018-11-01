@@ -1,0 +1,3 @@
+# Referenced at C:\Users\Lenovo\Downloads\back\16-9\GoogleWebmasters1\GoogleWebmasters1\GoogleWebmasters\app\build\intermediates\manifests\full\debug\AndroidManifest.xml:24
+-keep class android.support.multidex.MultiDexApplication { <init>(...); }
+

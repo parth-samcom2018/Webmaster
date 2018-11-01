@@ -1,0 +1,28 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\Users\\Lenovo\\Downloads\\back\\16-9\\GoogleWebmasters1\\GoogleWebmasters1\\GoogleWebmasters\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v19\\values-v19.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Lenovo\\Downloads\\back\\16-9\\GoogleWebmasters1\\GoogleWebmasters1\\GoogleWebmasters\\app\\src\\main\\res\\values-v19\\styles.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "4",
+                        "startOffsets": "91",
+                        "endLines": "10",
+                        "endColumns": "12",
+                        "endOffsets": "485"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "8",
+                        "endColumns": "12",
+                        "endOffsets": "443"
+                    }
+                }
+            ]
+        }
+    ]
+}

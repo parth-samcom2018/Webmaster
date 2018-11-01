@@ -1171,13 +1171,17 @@ class ComparisonFragment : Fragment() {
                             object : Callback<ChangeResponse> {
                                 override fun success(t: ChangeResponse?, response: Response?) {
 
-                                    changenames = t?.currentweek!!
+                                    /*changenames = response!!.body!!.toString()
 
+
+                                   var list: List<Category> = response.body().categories!!
+
+                                    Log.d("MainActivity", "" + changenames.size)*/
 
                                     Log.d(TAG, "clicks: " + checkbox_clicks.tag.toString())
 
 
-                                    Log.d(TAG, "size: " + changenames.size)
+                                    Log.d(TAG, "" + changenames.size)
 
 
                                     var msg: String = ""
@@ -1186,7 +1190,6 @@ class ComparisonFragment : Fragment() {
                                         msg = msg + item.clicks + "\n"
 
                                     }
-                                    Toast.makeText(getActivity(), "List of Category  \n  " + msg, Toast.LENGTH_LONG).show()
 
                                 }
 
@@ -1395,63 +1398,6 @@ class ComparisonFragment : Fragment() {
 
         rcViewOld?.adapter = adapterOld
         adapterOld?.notifyDataSetChanged()
-
-        /*DM().getApi().getAnalyticsClicks(startDate?.time.toString(),
-                endDate.time.toString(),
-                siteUrl,
-                startDateOld?.time.toString(),
-                endDateOld?.time.toString(),
-                queryGrouping.toString().replace("[", "").replace("]", ""),
-                checkbox_clicks.tag.toString(),
-                queryFilter.toString(),
-                object : Callback<Response> {
-                    override fun success(t: Response?, response: Response?) {
-                        Log.d(TAG,"startDate : " + startDate?.time.toString())
-                        Log.d(TAG,"endDate : " + endDate.time.toString())
-                        Log.d(TAG,"url : " + siteUrl)
-                        Log.d(TAG,"startDateOld : " + startDateOld?.time.toString())
-                        Log.d(TAG,"startDateOld : " + endDateOld?.time.toString())
-                        Log.d(TAG,"groupBy : " + queryGrouping.toString().replace("[", "").replace("]", ""))
-                        Log.d(TAG,"elements : " + checkbox_clicks.tag.toString())
-                        Log.d(TAG,"filterBy : " + queryFilter.toString())
-
-
-                    }
-
-                    override fun failure(error: RetrofitError?) {
-                        Log.d(TAG,"onFailed: " + error.toString())
-                    }
-
-                })*/
-
-
-
-
-        /*listViewChange = contentsView.findViewById<ListView>(R.id.listview_1)
-        listAdapterChange = object : ArrayAdapter<AnalyticsModel>(getActivity(), R.layout.compare_one) {
-
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                var convertView = convertView
-
-                if (convertView == null) {
-                    convertView = LayoutInflater.from(getActivity()).inflate(R.layout.compare_one, parent, false)
-                }
-
-                val e = changenames.get(position)
-
-                checkBox = convertView!!.findViewById(R.id.tvClicks_change)
-                checkBox?.setText(e.clicks)
-
-                return convertView
-            }
-
-            override fun getCount(): Int {
-                return changenames.size
-            }
-        }
-        listViewChange?.setAdapter(listAdapterChange)*/
-
-
 
 
         rcViewOld?.setOnTouchListener(object : View.OnTouchListener {
@@ -1742,7 +1688,7 @@ class ComparisonFragment : Fragment() {
                                     Log.d(TAG, "clicks: " + checkbox_clicks.tag.toString())
 
 
-                                    Log.d("MainActivity", "" + changenames.size)
+                                    Log.d(TAG, "" + changenames.size)
 
 
                                     var msg: String = ""
@@ -1752,7 +1698,7 @@ class ComparisonFragment : Fragment() {
 
                                     }
                                     Toast.makeText(getActivity(), "List of Category  \n  " + msg, Toast.LENGTH_LONG).show()
-
+                                    tv_dateOld?.setText(msg + "")
                                 }
 
                                 override fun failure(error: RetrofitError?) {

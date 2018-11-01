@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Keys"
+                android:textStyle="bold"
+                android:visibility="visible"
+                android:gravity="center_vertical|left|start"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/tvKeys" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:id="@+id/ll_first"
+            android:layout_margin="15dp"
+            android:background="@android:color/transparent"
+            android:visibility="visible"
+            android:gravity="right"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="Clicks"
+                android:textStyle="bold"
+                android:layout_gravity="right"
+                android:textColor="@color/purple"
+                android:id="@+id/tvClicks" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ctr"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:id="@+id/tvCtr" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Impressions"
+                android:visibility="gone"
+                android:textStyle="bold"
+                android:id="@+id/tvImpression" />
+
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="position"
+                android:textStyle="bold"
+                android:textColor="@color/blue_darken_1"
+                android:layout_gravity="right"
+                android:id="@+id/tvPosition" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>
