@@ -1,11 +1,8 @@
 package com.digitalmid.seograph_webmasters_tool
 
-import com.digitalmid.seograph_webmasters_tool.com.digitalmid.seograph_webmasters_tool.AnalyticsModel
-import com.digitalmid.seograph_webmasters_tool.com.digitalmid.seograph_webmasters_tool.ChangeResponse
 import retrofit.Callback
 import retrofit.client.Response
 import retrofit.http.*
-import java.util.*
 
 public interface API {
 
@@ -49,7 +46,7 @@ public interface API {
                            @Field("groupBy") groupBy: String,
                            @Field("elementsBy") elementsBy: String,
                            @Field("keyword") keyword: String,
-                           callback: Callback<ChangeResponse>)
+                           callback: Callback<Response>)
 
 
 }

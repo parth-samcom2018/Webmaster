@@ -14,6 +14,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDialog
 import android.support.v7.widget.*
+import android.text.Html
 import android.text.InputType
 import android.util.Log
 import android.view.*
@@ -53,14 +54,32 @@ class ComparisonFragment : Fragment() {
 
     var adView: AdView? = null
 
+    //recycler for clicks
+    var rcViewClicks: RecyclerView? = null
+    var adapterclicks: ClicksAdapter? = null
+
+    //recycler for ctr
+    var rcViewctr: RecyclerView? = null
+    var adapterctr: CtrAdapter? = null
+
+    //recycler for position
+    var rcViewPos: RecyclerView? = null
+    var adapterPos: PositionAdapter? = null
+
+    //recycler for impression
+    var rcViewImpression: RecyclerView? = null
+    var adapterImpression: ImpressionAdapter? = null
+
     // Recycler view
     var rcView: RecyclerView? = null
     var adapter1: CompareAdapter? = null
     var tv_date: TextView? = null
 
-    private var listViewChange: ListView? = null
-    private var listAdapterChange: ArrayAdapter<*>? = null
-    private var changenames: List<Analytics> = Vector<Analytics>()
+    var lv_compare: ListView? = null
+    var listViewChange: ListView? = null
+    var listAdapterChange: UserListAdapter? = null
+    var listAdapterChanges: ArrayAdapter<ResponseModel>? = null
+    var changenames: List<ResponseModel> = Vector<ResponseModel>()
 
     private var checkBox: CheckedTextView? = null
 
@@ -276,6 +295,7 @@ class ComparisonFragment : Fragment() {
         proccessStats(dateInterval, true)
         proccessStatsOld(-dateInterval, false)
 
+
         //fetch the last previous from top date picker 2
         //proccessStatsOld(-dateInterval)
 
@@ -329,8 +349,11 @@ class ComparisonFragment : Fragment() {
 
 
 
+
         return fragView
     }
+
+
 
     fun showDatePickerDialogOld(inputField: TextInputEditText) {
         //lets create date
@@ -1113,6 +1136,10 @@ class ComparisonFragment : Fragment() {
         Log.e(TAG, numberofrows?.size.toString())
 
         Log.d(TAG, results?.rows.toString())
+        /*Log.d(TAG, "startDate :" + startDate?.time.toString())
+        Log.d(TAG, "endDate :" + endDate?.time.toString())
+        Log.d(TAG, "startDateOld :" + startDateOld?.time.toString())
+        Log.d(TAG, "endDateOld :" + endDateOld?.time.toString())*/
 
         if (!results!!.containsKey("rows") || results!!.isEmpty() || results!!.containsKey("")) {
 
@@ -1143,8 +1170,6 @@ class ComparisonFragment : Fragment() {
             var posIndex = 0
             var imprIndex = 0
 
-
-
             checkbox_clicks.setOnCheckedChangeListener { compoundButton, isChecked ->
                 if (isChecked) {
 
@@ -1154,48 +1179,80 @@ class ComparisonFragment : Fragment() {
                     checkbox_ctr.setChecked(false)
                     //on view
                     emptyResponseView.visibility = View.GONE
-                    contentsView.visibility = View.VISIBLE
-                    drawLineGraphclicks(results)
+                    contentsView.visibility = View.GONE
+                    loadingIndicator.visibility = View.VISIBLE
 
-                    Log.d("clicks", results.toString())
-
-
-                    DM().getApi().getAnalyticsClicks(startDate?.time.toString(),
-                            endDate?.time.toString(),
+                    DM().getApi().getAnalyticsClicks(startDate!!.time!!.toString(),endDate!!.time.toString(),
                             siteUrl,
-                            startDateOld?.time.toString(),
-                            endDateOld?.time.toString(),
+                            startDateOld!!.time.toString(),
+                            endDateOld!!.time.toString(),
                             queryGrouping.toString().replace("[", "").replace("]", ""),
                             checkbox_clicks.tag.toString(),
                             queryFilter.toString(),
-                            object : Callback<ChangeResponse> {
-                                override fun success(t: ChangeResponse?, response: Response?) {
-
-                                    /*changenames = response!!.body!!.toString()
-
-
-                                   var list: List<Category> = response.body().categories!!
-
-                                    Log.d("MainActivity", "" + changenames.size)*/
-
-                                    Log.d(TAG, "clicks: " + checkbox_clicks.tag.toString())
-
-
-                                    Log.d(TAG, "" + changenames.size)
+                            object : Callback<Response> {
+                                override fun success(t: Response?, response: Response?) {
+                                    Log.d(TAG, "reponse: "  + response.toString())
+                                    Log.d(TAG, "reponse: "  + startDate!!.time!!.toString())
+                                    Log.d(TAG, "reponse: "  + endDate!!.time.toString())
+                                    Log.d(TAG, "reponse: "  + siteUrl)
+                                    Log.d(TAG, "reponse: "  + startDateOld!!.time!!.toString())
+                                    Log.d(TAG, "reponse: "  + endDateOld!!.time.toString())
+                                    Log.d(TAG, "reponse: "  + queryGrouping.toString().replace("[", "").replace("]", ""))
+                                    Log.d(TAG, "reponse: "  + checkbox_clicks.tag.toString())
+                                    Log.d(TAG, "reponse: "  + queryFilter.toString())
 
 
-                                    var msg: String = ""
-                                    for (item: Analytics in changenames.iterator()) {
+                                    lv_compare = contentsView.findViewById<ListView>(R.id.list)
 
-                                        msg = msg + item.clicks + "\n"
+                                    listAdapterChanges = object : ArrayAdapter<ResponseModel>(getActivity(), R.layout.user_list_row) {
 
+                                        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                                            var convertView = convertView
+
+                                            if (convertView == null) {
+                                                convertView = LayoutInflater.from(getActivity()).inflate(R.layout.user_list_row, parent, false)
+                                            }
+
+                                            val e = changenames.get(position)
+
+                                            val titleTV = convertView!!.findViewById<TextView>(R.id.txtName)
+                                            titleTV.setText(e.getWebsitedetails()!!.currentweek!!.get(0).clicks.toString())
+
+                                            Log.d(TAG, "message: " + e.getWebsitedetails()!!.diff.toString())
+
+
+                                            return convertView
+                                        }
+
+                                        override fun getCount(): Int {
+                                            return changenames.size
+                                        }
                                     }
+                                    lv_compare?.setAdapter(listAdapterChanges)
+                                    listAdapterChanges?.notifyDataSetChanged()
 
+
+
+
+                                    //dummy list
+                                    /*lv_compare = contentsView.findViewById(R.id.list)
+
+                                    listAdapterChange = UserListAdapter(getActivity(), generateData())
+                                    lv_compare?.adapter = listAdapterChange
+                                    listAdapterChange?.notifyDataSetChanged()*/
+
+
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+
+                                    drawLineGraphclicks(results)
                                 }
+
 
                                 override fun failure(error: RetrofitError?) {
-                                    Log.d(TAG, "clicks: " + error.toString())
+
                                 }
+
                             })
 
                 } else {
@@ -1215,27 +1272,11 @@ class ComparisonFragment : Fragment() {
                     //on view
                     emptyResponseView.visibility = View.GONE
                     contentsView.visibility = View.VISIBLE
+
+
                     drawLineGraphctr(results)
 
-                    Log.e("ctr", results.toString())
 
-                    /*DM().getApi().getAnalyticsClicks(startDate?.time.toString(),
-                            endDate?.time.toString(),
-                            siteUrl,
-                            startDateOld?.time.toString(),
-                            endDateOld?.time.toString(),
-                            queryGrouping.toString().replace("[","").replace("]",""),
-                            checkbox_ctr.tag.toString(),
-                            queryFilter.toString(),
-                            object : Callback<Response> {
-                                override fun success(t: Response?, response: Response?) {
-                                    Log.d(TAG,"ctr: " + checkbox_ctr.tag.toString())
-                                }
-
-                                override fun failure(error: RetrofitError?) {
-                                    Log.d(TAG,"ctr: " + error.toString())
-                                }
-                            })*/
                 } else {
                     //Toast.makeText(mContext, "Please select any elements to view in chart", Toast.LENGTH_SHORT).show()
                     contentsView.visibility = View.GONE
@@ -1252,27 +1293,13 @@ class ComparisonFragment : Fragment() {
                     //on view
                     emptyResponseView.visibility = View.GONE
                     contentsView.visibility = View.VISIBLE
+
+
                     drawLineGraphposition(results)
 
                     Log.e("position", results.toString())
 
-                    /*DM().getApi().getAnalyticsClicks(startDate?.time.toString(),
-                            endDate?.time.toString(),
-                            siteUrl,
-                            startDateOld?.time.toString(),
-                            endDateOld?.time.toString(),
-                            queryGrouping.toString().replace("[","").replace("]",""),
-                            checkbox_position.tag.toString(),
-                            queryFilter.toString(),
-                            object : Callback<Response> {
-                                override fun success(t: Response?, response: Response?) {
-                                    Log.d(TAG,"position: " + checkbox_position.tag.toString())
-                                }
 
-                                override fun failure(error: RetrofitError?) {
-                                    Log.d(TAG,"position: " + error.toString())
-                                }
-                            })*/
                 } else {
                     //Toast.makeText(mContext, "Please select any elements to view in chart", Toast.LENGTH_SHORT).show()
                     contentsView.visibility = View.GONE
@@ -1289,27 +1316,13 @@ class ComparisonFragment : Fragment() {
                     //on view
                     emptyResponseView.visibility = View.GONE
                     contentsView.visibility = View.VISIBLE
+
+
                     drawLineGraphimpr(results)
 
                     Log.e("impressions", results.toString())
 
-                    /*DM().getApi().getAnalyticsClicks(startDate?.time.toString(),
-                            endDate?.time.toString(),
-                            siteUrl,
-                            startDateOld?.time.toString(),
-                            endDateOld?.time.toString(),
-                            queryGrouping.toString().replace("[","").replace("]",""),
-                            checkbox_impression.tag.toString(),
-                            queryFilter.toString(),
-                            object : Callback<Response> {
-                                override fun success(t: Response?, response: Response?) {
-                                    Log.d(TAG,"impression: " + checkbox_impression.tag.toString())
-                                }
 
-                                override fun failure(error: RetrofitError?) {
-                                    Log.d(TAG,"impression: " + error.toString())
-                                }
-                            })*/
                 } else {
                     //Toast.makeText(mContext, "Please select any elements to view in chart", Toast.LENGTH_SHORT).show()
                     contentsView.visibility = View.GONE
@@ -1434,23 +1447,6 @@ class ComparisonFragment : Fragment() {
 
     }
 
-
-    /*private fun getdata(): MutableList<AnalyticsModel> {
-        val cb = object : Callback<AnalyticsRes> {
-            override fun success(ns: AnalyticsRes, response: Response) {
-                analytics = ns.data
-                arrayAdapter?.notifyDataSetChanged()
-                Log.d("get", "on: " + ns.data)
-            }
-
-            override fun failure(error: RetrofitError) {
-                Log.d("get", "off: " + error)
-            }
-        }
-
-
-        return getdata()
-    }*/
 
 
     @SuppressLint("ResourceType")
@@ -1658,7 +1654,67 @@ class ComparisonFragment : Fragment() {
             var posIndex = 0
             var imprIndex = 0
 
-            //drawLineGraphclicks(results)
+
+            /*DM().getApi().getAnalyticsClicks(startDate!!.time!!.toString(),endDate!!.time.toString(),
+                    siteUrl,
+                    startDateOld!!.time.toString(),
+                    endDateOld!!.time.toString(),
+                    queryGrouping.toString().replace("[", "").replace("]", ""),
+                    checkbox_clicks.tag.toString(),
+                    queryFilter.toString(),
+                    object : Callback<Response> {
+                        override fun success(t: Response?, response: Response?) {
+
+                            listViewChange = contentsView.findViewById(R.id.list)
+
+                            listAdapterChange = object : ArrayAdapter<CompareModel>(context, R.layout.user_list_row) {
+
+                                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                                    var convertView = convertView
+
+                                    if (convertView == null) {
+                                        convertView = LayoutInflater.from(context).inflate(R.layout.user_list_row, parent, false)
+                                    }
+
+                                    val e = changenames.get(position)
+
+                                    val titleTV = convertView!!.findViewById<TextView>(R.id.txtName)
+                                    titleTV.setText(e.clicks.toString())
+
+                                    Log.d(TAG, "message: " + e.clicks)
+                                    Log.d(TAG, "message: " + startDate!!.time!!.toString())
+                                    Log.d(TAG, "message: " + endDate!!.time.toString())
+                                    Log.d(TAG, "message: " + siteUrl)
+                                    Log.d(TAG, "message: " + startDateOld!!.time.toString())
+                                    Log.d(TAG, "message: " +  endDateOld!!.time.toString())
+                                    Log.d(TAG, "message: " +  queryGrouping.toString().replace("[", "").replace("]", ""))
+                                    Log.d(TAG, "message: " +  checkbox_clicks.tag.toString())
+                                    Log.d(TAG, "message: " +  queryFilter.toString())
+
+                                    return convertView
+                                }
+
+                                override fun getCount(): Int {
+                                    return changenames.size
+                                }
+                            }
+                            listViewChange?.setAdapter(listAdapterChange)
+                            listAdapterChange?.notifyDataSetChanged()
+
+
+                            contentsView.visibility = View.VISIBLE
+                            loadingIndicator.visibility = View.GONE
+
+                            drawLineGraphclicks(results)
+                        }
+
+
+                        override fun failure(error: RetrofitError?) {
+
+                        }
+
+                    })*/
+
 
             checkbox_clicks.setOnCheckedChangeListener { compoundButton, isChecked ->
                 if (isChecked) {
@@ -1669,43 +1725,78 @@ class ComparisonFragment : Fragment() {
                     checkbox_ctr.setChecked(false)
                     //on view
                     emptyResponseView.visibility = View.GONE
-                    contentsView.visibility = View.VISIBLE
-                    drawLineGraphclicks(results)
+                    contentsView.visibility = View.GONE
+                    loadingIndicator.visibility = View.VISIBLE
 
-                    Log.d("clicks", results.toString())
-
-                    DM().getApi().getAnalyticsClicks(startDate?.time.toString(),
-                            endDate?.time.toString(),
+                    DM().getApi().getAnalyticsClicks(startDate!!.time!!.toString(),endDate!!.time.toString(),
                             siteUrl,
-                            startDateOld?.time.toString(),
-                            endDateOld?.time.toString(),
+                            startDateOld!!.time.toString(),
+                            endDateOld!!.time.toString(),
                             queryGrouping.toString().replace("[", "").replace("]", ""),
                             checkbox_clicks.tag.toString(),
                             queryFilter.toString(),
-                            object : Callback<ChangeResponse> {
-                                override fun success(t: ChangeResponse?, response: Response?) {
+                            object : Callback<Response> {
+                                override fun success(t: Response?, response: Response?) {
+                                    Log.d(TAG, "reponse: "  + response.toString())
+                                    Log.d(TAG, "reponse: "  + startDate!!.time!!.toString())
+                                    Log.d(TAG, "reponse: "  + endDate!!.time.toString())
+                                    Log.d(TAG, "reponse: "  + siteUrl)
+                                    Log.d(TAG, "reponse: "  + startDateOld!!.time!!.toString())
+                                    Log.d(TAG, "reponse: "  + endDateOld!!.time.toString())
+                                    Log.d(TAG, "reponse: "  + queryGrouping.toString().replace("[", "").replace("]", ""))
+                                    Log.d(TAG, "reponse: "  + checkbox_clicks.tag.toString())
+                                    Log.d(TAG, "reponse: "  + queryFilter.toString())
 
-                                    Log.d(TAG, "clicks: " + checkbox_clicks.tag.toString())
+
+                                    lv_compare = contentsView.findViewById(R.id.list)
+
+                                    listAdapterChanges = object : ArrayAdapter<ResponseModel>(getActivity(), R.layout.user_list_row) {
+
+                                        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                                            var convertView = convertView
+
+                                            if (convertView == null) {
+                                                convertView = LayoutInflater.from(context).inflate(R.layout.user_list_row, parent, false)
+                                            }
+
+                                            val e = changenames.get(position)
+
+                                            val titleTV = convertView!!.findViewById<TextView>(R.id.txtName)
+                                            titleTV.setText(e.getWebsitedetails()!!.currentweek!!.get(0).clicks.toString())
+
+                                            Log.d(TAG, "message: " + e.getMessage().toString())
 
 
-                                    Log.d(TAG, "" + changenames.size)
+                                            return convertView
+                                        }
 
-
-                                    var msg: String = ""
-                                    for (item: Analytics in changenames.iterator()) {
-
-                                        msg = msg + item.clicks + "\n"
-
+                                        override fun getCount(): Int {
+                                            return changenames.size
+                                        }
                                     }
-                                    Toast.makeText(getActivity(), "List of Category  \n  " + msg, Toast.LENGTH_LONG).show()
-                                    tv_dateOld?.setText(msg + "")
+                                    lv_compare?.setAdapter(listAdapterChanges)
+                                    listAdapterChanges?.notifyDataSetChanged()
+
+
+                                    /*lv_compare = contentsView.findViewById(R.id.list)
+
+                                    listAdapterChange = UserListAdapter(getActivity(), generateData())
+                                    lv_compare?.adapter = listAdapterChange
+                                    listAdapterChange?.notifyDataSetChanged()*/
+
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+
+                                    drawLineGraphclicks(results)
+
                                 }
+
 
                                 override fun failure(error: RetrofitError?) {
-                                    Log.d(TAG, "clicks: " + error.toString())
-                                }
-                            })
 
+                                }
+
+                            })
 
                 } else {
                     //Toast.makeText(mContext, "Please select any elements to view in chart", Toast.LENGTH_SHORT).show()
@@ -1725,27 +1816,12 @@ class ComparisonFragment : Fragment() {
                     //on view
                     emptyResponseView.visibility = View.GONE
                     contentsView.visibility = View.VISIBLE
+
+
                     drawLineGraphctr(results)
 
                     Log.d("ctr", results.toString())
 
-                    /*DM().getApi().getAnalyticsClicks(startDate?.time.toString(),
-                            endDate?.time.toString(),
-                            siteUrl,
-                            startDateOld?.time.toString(),
-                            endDateOld?.time.toString(),
-                            queryGrouping.toString().replace("[", "").replace("]", ""),
-                            checkbox_ctr.tag.toString(),
-                            queryFilter.toString(),
-                            object : Callback<Response> {
-                                override fun success(t: Response?, response: Response?) {
-                                    Log.d(TAG, "ctr: " + checkbox_ctr.tag.toString())
-                                }
-
-                                override fun failure(error: RetrofitError?) {
-                                    Log.d(TAG, "ctr: " + error.toString())
-                                }
-                            })*/
                 } else {
                     //Toast.makeText(mContext, "Please select any elements to view in chart", Toast.LENGTH_SHORT).show()
                     contentsView.visibility = View.GONE
@@ -1762,27 +1838,11 @@ class ComparisonFragment : Fragment() {
                     //on view
                     emptyResponseView.visibility = View.GONE
                     contentsView.visibility = View.VISIBLE
+
                     drawLineGraphposition(results)
 
                     Log.d("position", results.toString())
 
-                    /*DM().getApi().getAnalyticsClicks(startDate?.time.toString(),
-                            endDate?.time.toString(),
-                            siteUrl,
-                            startDateOld?.time.toString(),
-                            endDateOld?.time.toString(),
-                            queryGrouping.toString().replace("[","").replace("]",""),
-                            checkbox_position.tag.toString(),
-                            queryFilter.toString(),
-                            object : Callback<Response> {
-                                override fun success(t: Response?, response: Response?) {
-                                    Log.d(TAG,"position: " + checkbox_position.tag.toString())
-                                }
-
-                                override fun failure(error: RetrofitError?) {
-                                    Log.d(TAG,"position: " + error.toString())
-                                }
-                            })*/
                 } else {
                     //Toast.makeText(mContext, "Please select any elements to view in chart", Toast.LENGTH_SHORT).show()
                     contentsView.visibility = View.GONE
@@ -1799,28 +1859,13 @@ class ComparisonFragment : Fragment() {
                     //on view
                     emptyResponseView.visibility = View.GONE
                     contentsView.visibility = View.VISIBLE
+
+
                     drawLineGraphimpr(results)
 
                     Log.d("impressions", results.toString())
 
 
-                    /* DM().getApi().getAnalyticsClicks(startDate?.time.toString(),
-                             endDate?.time.toString(),
-                             siteUrl,
-                             startDateOld?.time.toString(),
-                             endDateOld?.time.toString(),
-                             queryGrouping.toString().replace("[","").replace("]",""),
-                             checkbox_impression.tag.toString(),
-                             queryFilter.toString(),
-                             object : Callback<Response> {
-                                 override fun success(t: Response?, response: Response?) {
-                                     Log.d(TAG,"impressions: " + checkbox_impression.tag.toString())
-                                 }
-
-                                 override fun failure(error: RetrofitError?) {
-                                     Log.d(TAG,"impressions: " + error.toString())
-                                 }
-                             })*/
                 } else {
                     //Toast.makeText(mContext, "Please select any elements to view in chart", Toast.LENGTH_SHORT).show()
                     contentsView.visibility = View.GONE
@@ -1887,6 +1932,10 @@ class ComparisonFragment : Fragment() {
         tv_date = contentsView.findViewById<TextView>(R.id.tv_date)
         tv_date!!.setText("" + statDateView!!.text.toString().replace(" ", "").replace(" ", ""))
 
+
+
+
+
         //part 2 recyclerview for keyword list
         rcView = contentsView.findViewById<RecyclerView>(R.id.recyclerView)
         rcView!!.layoutManager = LinearLayoutManager(this!!.getActivity(), LinearLayout.VERTICAL, false)
@@ -1932,15 +1981,16 @@ class ComparisonFragment : Fragment() {
 
     }//end fun
 
-    /*fun change() {
-        rcViewChange = fragView.findViewById(R.id.recyclerView_change)
-        rcViewChange!!.layoutManager = LinearLayoutManager(this!!.getActivity(), LinearLayout.VERTICAL, false)
-        //adapter1 = CustomAdapter(getActivity(), results?.rows)
-        adapterChange = ChangeAdapter(getActivity(), results1?.rows!!)
 
-        rcViewChange?.adapter = adapterChange
-        adapterChange?.notifyDataSetChanged()
-    }*/
+    fun generateData(): ArrayList<Dummy> {
+
+        var result = ArrayList<Dummy>()
+        for (i in 0..9) {
+            var user: Dummy = Dummy()
+            result.add(user)
+        }
+        return result
+    }
 
 
     private fun showInterstitial() {
@@ -2778,6 +2828,9 @@ class ComparisonFragment : Fragment() {
             lineChartView.animateX(1000)
 
         }
+
+        contentsView.visibility = View.VISIBLE
+        loadingIndicator.visibility = View.GONE
 
     }
 
