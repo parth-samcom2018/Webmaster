@@ -234,6 +234,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.8"
                 android:tag="clicks"
+                android:checked="true"
                 android:text="@string/clicks" />
 
             <android.support.v7.widget.AppCompatCheckBox
@@ -241,7 +242,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.8"
-                android:tag="CTR"
+                android:tag="ctr"
                 android:text="@string/CTR" />
 
             <android.support.v7.widget.AppCompatCheckBox
@@ -497,8 +498,18 @@
                             android:layout_height="match_parent"
                             android:id="@+id/list"
                             android:scrollbars="vertical"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             android:divider="@null"/>
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recyclerView_compare"
+                            android:layout_width="150dp"
+                            android:layout_height="match_parent"
+                            android:focusable="false"
+                            android:scrollbars="vertical"
+                            android:visibility="visible"
+                            android:layout_weight="1"
+                            />
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/recyclerView"

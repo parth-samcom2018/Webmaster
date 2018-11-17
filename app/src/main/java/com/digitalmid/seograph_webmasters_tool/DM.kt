@@ -1,5 +1,6 @@
 package com.digitalmid.seograph_webmasters_tool
 
+import com.digitalmid.seograph_webmasters_tool.com.digitalmid.seograph_webmasters_tool.CompareData
 import com.google.gson.GsonBuilder
 import retrofit.RestAdapter
 import retrofit.converter.GsonConverter
@@ -9,6 +10,7 @@ public class DM {
 
     var APIROOT = "http://45.55.85.87/SeographWebmaster"
 
+    var member: CompareData? = null
 
     fun getAuthString(): String {
 

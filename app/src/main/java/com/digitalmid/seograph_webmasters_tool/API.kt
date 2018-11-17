@@ -1,5 +1,9 @@
 package com.digitalmid.seograph_webmasters_tool
 
+import com.digitalmid.seograph_webmasters_tool.com.digitalmid.seograph_webmasters_tool.DataModel
+import com.digitalmid.seograph_webmasters_tool.com.digitalmid.seograph_webmasters_tool.ResponseModel
+import com.digitalmid.seograph_webmasters_tool.com.digitalmid.seograph_webmasters_tool.SampleModel
+import com.digitalmid.seograph_webmasters_tool.com.digitalmid.seograph_webmasters_tool.UserData
 import retrofit.Callback
 import retrofit.client.Response
 import retrofit.http.*
@@ -48,5 +52,8 @@ public interface API {
                            @Field("keyword") keyword: String,
                            callback: Callback<Response>)
 
+    /*@POST("/api/getAnalyticsClicks")
+    abstract fun getAnalyticsClicks(@Body sampleModel: SampleModel,
+                          callback: Callback<Response>)*/
 
 }

@@ -4028,6 +4028,10 @@
         "source": "C:\\Users\\Lenovo\\Downloads\\back\\16-9\\GoogleWebmasters1\\GoogleWebmasters1\\GoogleWebmasters\\app\\src\\main\\res\\drawable\\ic_flag_cg.png"
     },
     {
+        "merged": "C:\\Users\\Lenovo\\Downloads\\back\\16-9\\GoogleWebmasters1\\GoogleWebmasters1\\GoogleWebmasters\\app\\build\\intermediates\\res\\merged\\debug\\layout_compare_solo.xml.flat",
+        "source": "C:\\Users\\Lenovo\\Downloads\\back\\16-9\\GoogleWebmasters1\\GoogleWebmasters1\\GoogleWebmasters\\app\\src\\main\\res\\layout\\compare_solo.xml"
+    },
+    {
         "merged": "C:\\Users\\Lenovo\\Downloads\\back\\16-9\\GoogleWebmasters1\\GoogleWebmasters1\\GoogleWebmasters\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_flag_gs.png.flat",
         "source": "C:\\Users\\Lenovo\\Downloads\\back\\16-9\\GoogleWebmasters1\\GoogleWebmasters1\\GoogleWebmasters\\app\\src\\main\\res\\drawable\\ic_flag_gs.png"
     },

@@ -8,24 +8,55 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:layout_margin="10dp">
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        android:weightSum="4">
 
         <TextView
             android:id="@+id/txtName"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Name"
+            android:text="Keywords"
             android:textStyle="bold"
             android:visibility="visible"
+            android:layout_weight="1"
             />
+
         <TextView
             android:id="@+id/txtComment"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="comment"
-            android:visibility="visible"/>
+            android:text="New"
+            android:textStyle="bold"
+            android:visibility="visible"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_weight="1"
+            />
 
+        <TextView
+            android:id="@+id/txtComment1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="old"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="visible"
+            android:layout_weight="1"
+            />
+
+        <TextView
+            android:id="@+id/txtChange"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Change"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="visible"
+            android:layout_weight="1"
+            />
 
     </LinearLayout>
 </RelativeLayout>

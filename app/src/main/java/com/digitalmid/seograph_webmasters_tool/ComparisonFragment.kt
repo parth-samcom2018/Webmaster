@@ -14,7 +14,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDialog
 import android.support.v7.widget.*
-import android.text.Html
 import android.text.InputType
 import android.util.Log
 import android.view.*
@@ -37,6 +36,7 @@ import org.json.JSONObject
 import retrofit.Callback
 import retrofit.RetrofitError
 import retrofit.client.Response
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -70,18 +70,21 @@ class ComparisonFragment : Fragment() {
     var rcViewImpression: RecyclerView? = null
     var adapterImpression: ImpressionAdapter? = null
 
+    //dummy
+    var rcView_compare: RecyclerView? = null
+    var adapter_compare: CompareListAdapter? = null
+
     // Recycler view
     var rcView: RecyclerView? = null
     var adapter1: CompareAdapter? = null
     var tv_date: TextView? = null
 
     var lv_compare: ListView? = null
-    var listViewChange: ListView? = null
-    var listAdapterChange: UserListAdapter? = null
-    var listAdapterChanges: ArrayAdapter<ResponseModel>? = null
-    var changenames: List<ResponseModel> = Vector<ResponseModel>()
+    var list_adapter_dummy: UserListAdapter? = null
+    //var listAdapterChange: ArrayAdapter<CurrentWeek>? = null
+    var changenames: List<UserData>? = null
 
-    private var checkBox: CheckedTextView? = null
+
 
     //second list for 7 days old
     var rcViewOld: RecyclerView? = null
@@ -125,6 +128,7 @@ class ComparisonFragment : Fragment() {
         proccessGroupResults()
     }//end
 
+
     //second group dialog
     /*val groupResultsDialogOld: AppCompatDialog  by lazy {
         proccessGroupResults()
@@ -147,6 +151,8 @@ class ComparisonFragment : Fragment() {
     var queryOptions: JSONObject = JSONObject()
     //comparison filter data
     var queryOptionsOld: JSONObject = JSONObject()
+
+    val sampleModel = SampleModel()
 
     //query filter  group
     //also add default
@@ -190,13 +196,6 @@ class ComparisonFragment : Fragment() {
     val checkbox_position: AppCompatCheckBox by lazy {
         fragView.findViewById<AppCompatCheckBox>(R.id.tv_position_compare)
     }
-
-    val elementsId = listOf<Int>(
-            R.id.tv_clicks_compare,
-            R.id.tv_ctr_compare,
-            R.id.tv_impression_compare,
-            R.id.tv_position_compare
-    )//end group ids
 
 
     //toggle grid
@@ -352,7 +351,6 @@ class ComparisonFragment : Fragment() {
 
         return fragView
     }
-
 
 
     fun showDatePickerDialogOld(inputField: TextInputEditText) {
@@ -1170,6 +1168,16 @@ class ComparisonFragment : Fragment() {
             var posIndex = 0
             var imprIndex = 0
 
+
+            /*sampleModel.firstDate = startDate!!.time.toString()
+            sampleModel.secondDate = endDate!!.time.toString()
+            sampleModel.websiteURL = siteUrl
+            sampleModel.thirdDate = startDateOld!!.time.toString()
+            sampleModel.fourDate = endDateOld!!.time.toString()
+            sampleModel.groupBy = queryGrouping.toString().replace("[", "").replace("]", "")
+            sampleModel.elementsBy = checkbox_clicks.tag.toString()
+            sampleModel.keyword = queryFilter.toString()*/
+
             checkbox_clicks.setOnCheckedChangeListener { compoundButton, isChecked ->
                 if (isChecked) {
 
@@ -1182,7 +1190,35 @@ class ComparisonFragment : Fragment() {
                     contentsView.visibility = View.GONE
                     loadingIndicator.visibility = View.VISIBLE
 
-                    DM().getApi().getAnalyticsClicks(startDate!!.time!!.toString(),endDate!!.time.toString(),
+
+                    /*DM().getApi().getAnalyticsClicks(sampleModel, object : Callback<Response> {
+                        override fun success(t: Response?, response: Response?) {
+                            Log.d(TAG, "date: " + sampleModel.firstDate)
+                            Log.d(TAG, "date: " + sampleModel.secondDate)
+                            Log.d(TAG, "date: " + response.toString())
+                            loadingIndicator.visibility = View.GONE
+                            contentsView.visibility = View.VISIBLE
+
+                            rcView_compare = contentsView.findViewById<RecyclerView>(R.id.recyclerView_compare)
+                            rcView_compare!!.layoutManager = LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false)
+                            //adapter1 = CustomAdapter(getActivity(), results?.rows)
+                            adapter_compare = CompareListAdapter(getActivity(), generateData())
+
+                            rcView_compare?.adapter = adapter_compare
+                            adapter_compare?.notifyDataSetChanged()
+
+                            drawLineGraphclicks(results)
+                        }
+
+                        override fun failure(error: RetrofitError?) {
+                            Log.d(TAG, "error: " + error)
+                            loadingIndicator.visibility = View.GONE
+                            contentsView.visibility = View.VISIBLE
+                        }
+
+                    })*/
+
+                    DM().getApi().getAnalyticsClicks(startDate!!.time!!.toString(), endDate!!.time.toString(),
                             siteUrl,
                             startDateOld!!.time.toString(),
                             endDateOld!!.time.toString(),
@@ -1191,69 +1227,39 @@ class ComparisonFragment : Fragment() {
                             queryFilter.toString(),
                             object : Callback<Response> {
                                 override fun success(t: Response?, response: Response?) {
-                                    Log.d(TAG, "reponse: "  + response.toString())
-                                    Log.d(TAG, "reponse: "  + startDate!!.time!!.toString())
-                                    Log.d(TAG, "reponse: "  + endDate!!.time.toString())
-                                    Log.d(TAG, "reponse: "  + siteUrl)
-                                    Log.d(TAG, "reponse: "  + startDateOld!!.time!!.toString())
-                                    Log.d(TAG, "reponse: "  + endDateOld!!.time.toString())
-                                    Log.d(TAG, "reponse: "  + queryGrouping.toString().replace("[", "").replace("]", ""))
-                                    Log.d(TAG, "reponse: "  + checkbox_clicks.tag.toString())
-                                    Log.d(TAG, "reponse: "  + queryFilter.toString())
-
-
-                                    lv_compare = contentsView.findViewById<ListView>(R.id.list)
-
-                                    listAdapterChanges = object : ArrayAdapter<ResponseModel>(getActivity(), R.layout.user_list_row) {
-
-                                        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                                            var convertView = convertView
-
-                                            if (convertView == null) {
-                                                convertView = LayoutInflater.from(getActivity()).inflate(R.layout.user_list_row, parent, false)
-                                            }
-
-                                            val e = changenames.get(position)
-
-                                            val titleTV = convertView!!.findViewById<TextView>(R.id.txtName)
-                                            titleTV.setText(e.getWebsitedetails()!!.currentweek!!.get(0).clicks.toString())
-
-                                            Log.d(TAG, "message: " + e.getWebsitedetails()!!.diff.toString())
-
-
-                                            return convertView
-                                        }
-
-                                        override fun getCount(): Int {
-                                            return changenames.size
-                                        }
-                                    }
-                                    lv_compare?.setAdapter(listAdapterChanges)
-                                    listAdapterChanges?.notifyDataSetChanged()
-
-
-
-
-                                    //dummy list
-                                    /*lv_compare = contentsView.findViewById(R.id.list)
-
-                                    listAdapterChange = UserListAdapter(getActivity(), generateData())
-                                    lv_compare?.adapter = listAdapterChange
-                                    listAdapterChange?.notifyDataSetChanged()*/
-
-
                                     contentsView.visibility = View.VISIBLE
                                     loadingIndicator.visibility = View.GONE
+
+                                    Log.d(TAG, "response : " + response!!.status)
+
+                                    lv_compare = contentsView.findViewById(R.id.list)
+                                    list_adapter_dummy = UserListAdapter(getActivity(), generateData())
+
+                                    lv_compare?.adapter = list_adapter_dummy
+                                    list_adapter_dummy?.notifyDataSetChanged()
+
+
+                                    Toast.makeText(mContext, "" +response!!.status,Toast.LENGTH_SHORT).show()
+
+                                    rcViewctr = contentsView.findViewById<RecyclerView>(R.id.recyclerView_compare)
+                                    rcViewctr!!.layoutManager = LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false)
+                                    adapterctr = CtrAdapter(getActivity(), generateData())
+
+                                    rcViewctr?.adapter = adapterctr
+                                    adapterctr?.notifyDataSetChanged()
 
                                     drawLineGraphclicks(results)
                                 }
 
 
                                 override fun failure(error: RetrofitError?) {
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+
 
                                 }
-
                             })
+
 
                 } else {
                     //Toast.makeText(mContext, "Please select any elements to view in chart", Toast.LENGTH_SHORT).show()
@@ -1271,11 +1277,68 @@ class ComparisonFragment : Fragment() {
                     checkbox_ctr.setChecked(true)
                     //on view
                     emptyResponseView.visibility = View.GONE
-                    contentsView.visibility = View.VISIBLE
+                    contentsView.visibility = View.GONE
+                    loadingIndicator.visibility = View.VISIBLE
 
+                    /*DM().getApi().getAnalyticsClicks(sampleModel, object : Callback<Response> {
+                        override fun success(t: Response?, response: Response?) {
 
-                    drawLineGraphctr(results)
+                            loadingIndicator.visibility = View.GONE
+                            contentsView.visibility = View.VISIBLE
 
+                            rcView_compare = contentsView.findViewById<RecyclerView>(R.id.recyclerView_compare)
+                            rcView_compare!!.layoutManager = LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false)
+                            //adapter1 = CustomAdapter(getActivity(), results?.rows)
+                            adapter_compare = CompareListAdapter(getActivity(), generateDataCtr())
+
+                            rcView_compare?.adapter = adapter_compare
+                            adapter_compare?.notifyDataSetChanged()
+
+                            drawLineGraphctr(results)
+                        }
+
+                        override fun failure(error: RetrofitError?) {
+                            Log.d(TAG, "error: " + error)
+                            loadingIndicator.visibility = View.GONE
+                            contentsView.visibility = View.VISIBLE
+                        }
+
+                    })*/
+
+                    DM().getApi().getAnalyticsClicks(startDate!!.time!!.toString(), endDate!!.time.toString(),
+                            siteUrl,
+                            startDateOld!!.time.toString(),
+                            endDateOld!!.time.toString(),
+                            queryGrouping.toString().replace("[", "").replace("]", ""),
+                            checkbox_ctr.tag.toString(),
+                            queryFilter.toString(),
+                            object : Callback<Response> {
+                                override fun success(t: Response?, response: Response?) {
+
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+
+                                    Log.d(TAG, "response : " + response!!.status)
+
+                                    Toast.makeText(mContext, "" + response.status,Toast.LENGTH_SHORT).show()
+
+                                    rcView_compare = contentsView.findViewById<RecyclerView>(R.id.recyclerView_compare)
+                                    rcView_compare!!.layoutManager = LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false)
+                                    //adapter1 = CustomAdapter(getActivity(), results?.rows)
+                                    adapter_compare = CompareListAdapter(getActivity(), generateDataCtr())
+
+                                    rcView_compare?.adapter = adapter_compare
+                                    adapter_compare?.notifyDataSetChanged()
+
+                                    drawLineGraphctr(results)
+                                }
+
+                                override fun failure(error: RetrofitError?) {
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+                                }
+
+                            })
 
                 } else {
                     //Toast.makeText(mContext, "Please select any elements to view in chart", Toast.LENGTH_SHORT).show()
@@ -1292,8 +1355,48 @@ class ComparisonFragment : Fragment() {
                     checkbox_ctr.setChecked(false)
                     //on view
                     emptyResponseView.visibility = View.GONE
-                    contentsView.visibility = View.VISIBLE
+                    contentsView.visibility = View.GONE
+                    loadingIndicator.visibility = View.VISIBLE
 
+                    /*lv_compare = contentsView.findViewById(R.id.list)
+                    list_adapter_dummy = UserListAdapter(getActivity(), generateDataPos())
+                    lv_compare?.adapter = list_adapter_dummy
+                    list_adapter_dummy?.notifyDataSetChanged()*/
+
+                    DM().getApi().getAnalyticsClicks(startDate!!.time!!.toString(), endDate!!.time.toString(),
+                            siteUrl,
+                            startDateOld!!.time.toString(),
+                            endDateOld!!.time.toString(),
+                            queryGrouping.toString().replace("[", "").replace("]", ""),
+                            checkbox_position.tag.toString(),
+                            queryFilter.toString(),
+                            object : Callback<Response> {
+                                override fun success(t: Response?, response: Response?) {
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+
+                                    Log.d(TAG, "response : " + response!!.status)
+
+
+                                    rcView_compare = contentsView.findViewById<RecyclerView>(R.id.recyclerView_compare)
+                                    rcView_compare!!.layoutManager = LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false)
+                                    //adapter1 = CustomAdapter(getActivity(), results?.rows)
+                                    adapter_compare = CompareListAdapter(getActivity(), generateDataPos())
+
+                                    rcView_compare?.adapter = adapter_compare
+                                    adapter_compare?.notifyDataSetChanged()
+
+                                    drawLineGraphclicks(results)
+                                }
+
+
+                                override fun failure(error: RetrofitError?) {
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+
+
+                                }
+                            })
 
                     drawLineGraphposition(results)
 
@@ -1315,8 +1418,43 @@ class ComparisonFragment : Fragment() {
                     checkbox_ctr.setChecked(false)
                     //on view
                     emptyResponseView.visibility = View.GONE
-                    contentsView.visibility = View.VISIBLE
+                    contentsView.visibility = View.GONE
+                    loadingIndicator.visibility = View.VISIBLE
 
+                    DM().getApi().getAnalyticsClicks(startDate!!.time!!.toString(), endDate!!.time.toString(),
+                            siteUrl,
+                            startDateOld!!.time.toString(),
+                            endDateOld!!.time.toString(),
+                            queryGrouping.toString().replace("[", "").replace("]", ""),
+                            checkbox_position.tag.toString(),
+                            queryFilter.toString(),
+                            object : Callback<Response> {
+                                override fun success(t: Response?, response: Response?) {
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+
+                                    Log.d(TAG, "response : " + response!!.status)
+
+
+                                    rcView_compare = contentsView.findViewById<RecyclerView>(R.id.recyclerView_compare)
+                                    rcView_compare!!.layoutManager = LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false)
+                                    //adapter1 = CustomAdapter(getActivity(), results?.rows)
+                                    adapter_compare = CompareListAdapter(getActivity(), generateDataImpression())
+
+                                    rcView_compare?.adapter = adapter_compare
+                                    adapter_compare?.notifyDataSetChanged()
+
+                                    drawLineGraphclicks(results)
+                                }
+
+
+                                override fun failure(error: RetrofitError?) {
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+
+
+                                }
+                            })
 
                     drawLineGraphimpr(results)
 
@@ -1403,6 +1541,14 @@ class ComparisonFragment : Fragment() {
         tv_dateOld!!.setText("" + statDateViewOld!!.text.toString().replace(" ", "").replace(" ", ""))
 
 
+        /*rcView_compare = contentsView.findViewById<RecyclerView>(R.id.recyclerView_compare)
+        rcView_compare!!.layoutManager = LinearLayoutManager(this!!.activity, LinearLayout.VERTICAL, false)
+        adapter_compare = CompareListAdapter(getActivity(), generateData())
+        rcView_compare?.adapter = adapter_compare
+        adapter_compare?.notifyDataSetChanged()*/
+
+
+
         //part 2 recyclerview for keyword list
         rcViewOld = contentsView.findViewById<RecyclerView>(R.id.recyclerView_old)
         rcViewOld!!.layoutManager = LinearLayoutManager(this!!.getActivity(), LinearLayout.VERTICAL, false)
@@ -1446,7 +1592,6 @@ class ComparisonFragment : Fragment() {
         })
 
     }
-
 
 
     @SuppressLint("ResourceType")
@@ -1655,67 +1800,6 @@ class ComparisonFragment : Fragment() {
             var imprIndex = 0
 
 
-            /*DM().getApi().getAnalyticsClicks(startDate!!.time!!.toString(),endDate!!.time.toString(),
-                    siteUrl,
-                    startDateOld!!.time.toString(),
-                    endDateOld!!.time.toString(),
-                    queryGrouping.toString().replace("[", "").replace("]", ""),
-                    checkbox_clicks.tag.toString(),
-                    queryFilter.toString(),
-                    object : Callback<Response> {
-                        override fun success(t: Response?, response: Response?) {
-
-                            listViewChange = contentsView.findViewById(R.id.list)
-
-                            listAdapterChange = object : ArrayAdapter<CompareModel>(context, R.layout.user_list_row) {
-
-                                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                                    var convertView = convertView
-
-                                    if (convertView == null) {
-                                        convertView = LayoutInflater.from(context).inflate(R.layout.user_list_row, parent, false)
-                                    }
-
-                                    val e = changenames.get(position)
-
-                                    val titleTV = convertView!!.findViewById<TextView>(R.id.txtName)
-                                    titleTV.setText(e.clicks.toString())
-
-                                    Log.d(TAG, "message: " + e.clicks)
-                                    Log.d(TAG, "message: " + startDate!!.time!!.toString())
-                                    Log.d(TAG, "message: " + endDate!!.time.toString())
-                                    Log.d(TAG, "message: " + siteUrl)
-                                    Log.d(TAG, "message: " + startDateOld!!.time.toString())
-                                    Log.d(TAG, "message: " +  endDateOld!!.time.toString())
-                                    Log.d(TAG, "message: " +  queryGrouping.toString().replace("[", "").replace("]", ""))
-                                    Log.d(TAG, "message: " +  checkbox_clicks.tag.toString())
-                                    Log.d(TAG, "message: " +  queryFilter.toString())
-
-                                    return convertView
-                                }
-
-                                override fun getCount(): Int {
-                                    return changenames.size
-                                }
-                            }
-                            listViewChange?.setAdapter(listAdapterChange)
-                            listAdapterChange?.notifyDataSetChanged()
-
-
-                            contentsView.visibility = View.VISIBLE
-                            loadingIndicator.visibility = View.GONE
-
-                            drawLineGraphclicks(results)
-                        }
-
-
-                        override fun failure(error: RetrofitError?) {
-
-                        }
-
-                    })*/
-
-
             checkbox_clicks.setOnCheckedChangeListener { compoundButton, isChecked ->
                 if (isChecked) {
 
@@ -1728,7 +1812,47 @@ class ComparisonFragment : Fragment() {
                     contentsView.visibility = View.GONE
                     loadingIndicator.visibility = View.VISIBLE
 
-                    DM().getApi().getAnalyticsClicks(startDate!!.time!!.toString(),endDate!!.time.toString(),
+                    /*sampleModel.firstDate = startDate!!.time.toString()
+                    sampleModel.secondDate = endDate!!.time.toString()
+                    sampleModel.websiteURL = siteUrl
+                    sampleModel.thirdDate = startDateOld!!.time.toString()
+                    sampleModel.fourDate = endDateOld!!.time.toString()
+                    sampleModel.groupBy = queryGrouping.toString().replace("[", "").replace("]", "")
+                    sampleModel.elementsBy = checkbox_clicks.tag.toString()
+                    sampleModel.keyword = queryFilter.toString()
+
+
+
+                    DM().getApi().getAnalyticsClicks(sampleModel, object : Callback<Response> {
+                        override fun success(t: Response?, response: Response?) {
+                            Log.d(TAG, "date: " + sampleModel.firstDate)
+                            Log.d(TAG, "date: " + sampleModel.secondDate)
+                            Log.d(TAG, "date: " + response.toString())
+
+                            loadingIndicator.visibility = View.GONE
+                            contentsView.visibility = View.VISIBLE
+
+                            rcView_compare = contentsView.findViewById<RecyclerView>(R.id.recyclerView_compare)
+                            rcView_compare!!.layoutManager = LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false)
+                            //adapter1 = CustomAdapter(getActivity(), results?.rows)
+                            adapter_compare = CompareListAdapter(getActivity(), generateData())
+
+                            rcView_compare?.adapter = adapter_compare
+                            adapter_compare?.notifyDataSetChanged()
+
+                            drawLineGraphclicks(results)
+                        }
+
+                        override fun failure(error: RetrofitError?) {
+                            Log.d(TAG, "error: " + error)
+
+                            loadingIndicator.visibility = View.GONE
+                            contentsView.visibility = View.VISIBLE
+                        }
+
+                    })*/
+
+                    DM().getApi().getAnalyticsClicks(startDate.time.toString(), endDate.time.toString(),
                             siteUrl,
                             startDateOld!!.time.toString(),
                             endDateOld!!.time.toString(),
@@ -1737,66 +1861,43 @@ class ComparisonFragment : Fragment() {
                             queryFilter.toString(),
                             object : Callback<Response> {
                                 override fun success(t: Response?, response: Response?) {
-                                    Log.d(TAG, "reponse: "  + response.toString())
-                                    Log.d(TAG, "reponse: "  + startDate!!.time!!.toString())
-                                    Log.d(TAG, "reponse: "  + endDate!!.time.toString())
-                                    Log.d(TAG, "reponse: "  + siteUrl)
-                                    Log.d(TAG, "reponse: "  + startDateOld!!.time!!.toString())
-                                    Log.d(TAG, "reponse: "  + endDateOld!!.time.toString())
-                                    Log.d(TAG, "reponse: "  + queryGrouping.toString().replace("[", "").replace("]", ""))
-                                    Log.d(TAG, "reponse: "  + checkbox_clicks.tag.toString())
-                                    Log.d(TAG, "reponse: "  + queryFilter.toString())
-
-
-                                    lv_compare = contentsView.findViewById(R.id.list)
-
-                                    listAdapterChanges = object : ArrayAdapter<ResponseModel>(getActivity(), R.layout.user_list_row) {
-
-                                        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                                            var convertView = convertView
-
-                                            if (convertView == null) {
-                                                convertView = LayoutInflater.from(context).inflate(R.layout.user_list_row, parent, false)
-                                            }
-
-                                            val e = changenames.get(position)
-
-                                            val titleTV = convertView!!.findViewById<TextView>(R.id.txtName)
-                                            titleTV.setText(e.getWebsitedetails()!!.currentweek!!.get(0).clicks.toString())
-
-                                            Log.d(TAG, "message: " + e.getMessage().toString())
-
-
-                                            return convertView
-                                        }
-
-                                        override fun getCount(): Int {
-                                            return changenames.size
-                                        }
-                                    }
-                                    lv_compare?.setAdapter(listAdapterChanges)
-                                    listAdapterChanges?.notifyDataSetChanged()
-
-
-                                    /*lv_compare = contentsView.findViewById(R.id.list)
-
-                                    listAdapterChange = UserListAdapter(getActivity(), generateData())
-                                    lv_compare?.adapter = listAdapterChange
-                                    listAdapterChange?.notifyDataSetChanged()*/
-
                                     contentsView.visibility = View.VISIBLE
                                     loadingIndicator.visibility = View.GONE
 
-                                    drawLineGraphclicks(results)
+                                    Log.d(TAG, "response: " + response?.status)
 
+
+                                    lv_compare = contentsView.findViewById(R.id.list)
+                                    list_adapter_dummy = UserListAdapter(getActivity(), generateData())
+
+                                    lv_compare?.adapter = list_adapter_dummy
+                                    list_adapter_dummy?.notifyDataSetChanged()
+
+
+                                    rcView_compare = contentsView.findViewById<RecyclerView>(R.id.recyclerView_compare)
+                                    rcView_compare!!.layoutManager = LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false)
+                                    //adapter1 = CustomAdapter(getActivity(), results?.rows)
+                                    adapter_compare = CompareListAdapter(getActivity(), generateData())
+
+                                    rcView_compare?.adapter = adapter_compare
+                                    adapter_compare?.notifyDataSetChanged()
+
+                                    drawLineGraphclicks(results)
                                 }
 
 
                                 override fun failure(error: RetrofitError?) {
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+
+
 
                                 }
 
                             })
+
+
+                    //dummy data
 
                 } else {
                     //Toast.makeText(mContext, "Please select any elements to view in chart", Toast.LENGTH_SHORT).show()
@@ -1813,12 +1914,53 @@ class ComparisonFragment : Fragment() {
                     checkbox_position.setChecked(false)
                     checkbox_impression.setChecked(false)
                     checkbox_ctr.setChecked(true)
+                    Toast.makeText(mContext, "" +checkbox_ctr.tag.toString(),Toast.LENGTH_SHORT).show()
                     //on view
                     emptyResponseView.visibility = View.GONE
-                    contentsView.visibility = View.VISIBLE
+                    contentsView.visibility = View.GONE
+                    loadingIndicator.visibility = View.VISIBLE
+
+                    DM().getApi().getAnalyticsClicks(startDate.time.toString(), endDate.time.toString(),
+                            siteUrl,
+                            startDateOld!!.time.toString(),
+                            endDateOld!!.time.toString(),
+                            queryGrouping.toString().replace("[", "").replace("]", ""),
+                            checkbox_ctr.tag.toString(),
+                            queryFilter.toString(),
+                            object : Callback<Response> {
+                                override fun success(t: Response?, response: Response?) {
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+
+                                    Log.d(TAG, "response: " + response?.status)
+
+                                    lv_compare = contentsView.findViewById(R.id.list)
+                                    list_adapter_dummy = UserListAdapter(getActivity(), generateData())
+
+                                    lv_compare?.adapter = list_adapter_dummy
+                                    list_adapter_dummy?.notifyDataSetChanged()
 
 
-                    drawLineGraphctr(results)
+
+                                    rcView_compare = contentsView.findViewById<RecyclerView>(R.id.recyclerView_compare)
+                                    rcView_compare!!.layoutManager = LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false)
+                                    //adapter1 = CustomAdapter(getActivity(), results?.rows)
+                                    adapter_compare = CompareListAdapter(getActivity(), generateDataCtr())
+
+                                    rcView_compare?.adapter = adapter_compare
+                                    adapter_compare?.notifyDataSetChanged()
+
+                                    drawLineGraphctr(results)
+                                }
+
+                                override fun failure(error: RetrofitError?) {
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+
+                                }
+
+                            })
+
 
                     Log.d("ctr", results.toString())
 
@@ -1837,7 +1979,54 @@ class ComparisonFragment : Fragment() {
                     checkbox_ctr.setChecked(false)
                     //on view
                     emptyResponseView.visibility = View.GONE
-                    contentsView.visibility = View.VISIBLE
+                    contentsView.visibility = View.GONE
+                    loadingIndicator.visibility = View.VISIBLE
+
+                    /*lv_compare = contentsView.findViewById(R.id.list)
+                    list_adapter_dummy = UserListAdapter(getActivity(), generateDataPos())
+                    lv_compare?.adapter = list_adapter_dummy
+                    list_adapter_dummy?.notifyDataSetChanged()*/
+
+                    DM().getApi().getAnalyticsClicks(startDate.time.toString(), endDate.time.toString(),
+                            siteUrl,
+                            startDateOld!!.time.toString(),
+                            endDateOld!!.time.toString(),
+                            queryGrouping.toString().replace("[", "").replace("]", ""),
+                            checkbox_position.tag.toString(),
+                            queryFilter.toString(),
+                            object : Callback<Response> {
+                                override fun success(t: Response?, response: Response?) {
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+
+                                    Log.d(TAG, "response: " + response?.status)
+
+                                    /*lv_compare = contentsView.findViewById(R.id.list)
+                                    list_adapter_dummy = UserListAdapter(getActivity(), generateData())
+
+                                    lv_compare?.adapter = list_adapter_dummy
+                                    list_adapter_dummy?.notifyDataSetChanged()*/
+
+
+
+                                    rcView_compare = contentsView.findViewById<RecyclerView>(R.id.recyclerView_compare)
+                                    rcView_compare!!.layoutManager = LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false)
+                                    //adapter1 = CustomAdapter(getActivity(), results?.rows)
+                                    adapter_compare = CompareListAdapter(getActivity(), generateDataPos())
+
+                                    rcView_compare?.adapter = adapter_compare
+                                    adapter_compare?.notifyDataSetChanged()
+
+                                    drawLineGraphctr(results)
+                                }
+
+                                override fun failure(error: RetrofitError?) {
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+
+                                }
+
+                            })
 
                     drawLineGraphposition(results)
 
@@ -1858,8 +2047,47 @@ class ComparisonFragment : Fragment() {
                     checkbox_impression.setChecked(true)
                     //on view
                     emptyResponseView.visibility = View.GONE
-                    contentsView.visibility = View.VISIBLE
+                    contentsView.visibility = View.GONE
+                    loadingIndicator.visibility = View.VISIBLE
 
+                    /*lv_compare = contentsView.findViewById(R.id.list)
+                    list_adapter_dummy = UserListAdapter(getActivity(), generateDataImpression())
+                    lv_compare?.adapter = list_adapter_dummy
+                    list_adapter_dummy?.notifyDataSetChanged()*/
+
+                    DM().getApi().getAnalyticsClicks(startDate.time.toString(), endDate.time.toString(),
+                            siteUrl,
+                            startDateOld!!.time.toString(),
+                            endDateOld!!.time.toString(),
+                            queryGrouping.toString().replace("[", "").replace("]", ""),
+                            checkbox_impression.tag.toString(),
+                            queryFilter.toString(),
+                            object : Callback<Response> {
+                                override fun success(t: Response?, response: Response?) {
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+
+                                    Log.d(TAG, "response: " + response?.status)
+
+
+                                    rcView_compare = contentsView.findViewById<RecyclerView>(R.id.recyclerView_compare)
+                                    rcView_compare!!.layoutManager = LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false)
+                                    //adapter1 = CustomAdapter(getActivity(), results?.rows)
+                                    adapter_compare = CompareListAdapter(getActivity(), generateDataImpression())
+
+                                    rcView_compare?.adapter = adapter_compare
+                                    adapter_compare?.notifyDataSetChanged()
+
+                                    drawLineGraphctr(results)
+                                }
+
+                                override fun failure(error: RetrofitError?) {
+                                    contentsView.visibility = View.VISIBLE
+                                    loadingIndicator.visibility = View.GONE
+
+                                }
+
+                            })
 
                     drawLineGraphimpr(results)
 
@@ -1932,8 +2160,11 @@ class ComparisonFragment : Fragment() {
         tv_date = contentsView.findViewById<TextView>(R.id.tv_date)
         tv_date!!.setText("" + statDateView!!.text.toString().replace(" ", "").replace(" ", ""))
 
-
-
+        /*rcView_compare = contentsView.findViewById<RecyclerView>(R.id.recyclerView_compare)
+        rcView_compare!!.layoutManager = LinearLayoutManager(this!!.activity, LinearLayout.VERTICAL, false)
+        adapter_compare = CompareListAdapter(getActivity(), generateData())
+        rcView_compare?.adapter = adapter_compare
+        adapter_compare?.notifyDataSetChanged()*/
 
 
         //part 2 recyclerview for keyword list
@@ -1982,15 +2213,47 @@ class ComparisonFragment : Fragment() {
     }//end fun
 
 
-    fun generateData(): ArrayList<Dummy> {
+    fun generateDataImpression(): ArrayList<UserData> {
 
-        var result = ArrayList<Dummy>()
+        var result = ArrayList<UserData>()
         for (i in 0..9) {
-            var user: Dummy = Dummy()
+            var user: UserData = UserData("Impression","0", "0", "0")
             result.add(user)
         }
         return result
     }
+
+
+    fun generateDataPos(): ArrayList<UserData> {
+
+        var result = ArrayList<UserData>()
+        for (i in 0..9) {
+            var user: UserData = UserData("Position","0", "0", "0")
+            result.add(user)
+        }
+        return result
+    }
+
+
+    fun generateDataCtr(): ArrayList<UserData> {
+
+        var result = ArrayList<UserData>()
+        for (i in 0..9) {
+            var user: UserData = UserData("ctr","0", "0", "0")
+            result.add(user)
+        }
+        return result
+    }
+
+     fun generateData(): ArrayList<UserData> {
+
+         var result = ArrayList<UserData>()
+         for (i in 0..9) {
+             var user: UserData = UserData("clicks","0", "0","0")
+             result.add(user)
+         }
+         return result
+     }
 
 
     private fun showInterstitial() {

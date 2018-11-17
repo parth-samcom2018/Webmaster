@@ -9,10 +9,12 @@ import android.widget.TextView
 import com.digitalmid.seograph_webmasters_tool.R
 import com.google.api.services.webmasters.model.ApiDataRow
 
-class CtrAdapter(val dataList: FragmentActivity, val items: MutableList<ApiDataRow>) : RecyclerView.Adapter<CtrAdapter.ViewHolder>() {
+class CtrAdapter(val dataList: FragmentActivity, val items: MutableList<UserData>) : RecyclerView.Adapter<CtrAdapter.ViewHolder>() {
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): CtrAdapter.ViewHolder {
-        val v = LayoutInflater.from(parent?.context).inflate(R.layout.compare_ctr_one, parent, false)
+        val v = LayoutInflater.from(parent?.context).inflate(R.layout.compare_solo, parent, false)
         return ViewHolder(v)
     }
 
@@ -31,17 +33,21 @@ class CtrAdapter(val dataList: FragmentActivity, val items: MutableList<ApiDataR
 
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindItems(user: ApiDataRow) {
-            val tvCtr = itemView.findViewById<TextView>(R.id.tvCtr)
+        fun bindItems(user: UserData) {
+            val textClicks = itemView.findViewById<TextView>(R.id.tvClicks)
+            val textClicksOld = itemView.findViewById<TextView>(R.id.tv_clicks_old)
             val textKeys = itemView.findViewById<TextView>(R.id.tvKeys)
-            val tv_change = itemView.findViewById<TextView>(R.id.tv_change)
+            val textChange = itemView.findViewById<TextView>(R.id.tv_change_data)
 
 
             // show data
-            tvCtr.text = user.ctr.toString()
+            textClicks.text = user.change
+            textClicksOld.text = user.comment
+            textChange.text = user.change
 
             try {
-                textKeys?.text = "CTR"
+                //textKeys?.text = user.getKeys().toString().replace("[", "").replace("]", "");
+                textKeys?.text = user.name
             } catch (e: NullPointerException) {
                 e.printStackTrace()
             }

@@ -3,6 +3,7 @@ package com.digitalmid.seograph_webmasters_tool.com.digitalmid.seograph_webmaste
 import com.google.gson.annotations.SerializedName
 import java.net.URL
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ResponseModel {
 
@@ -14,6 +15,21 @@ class ResponseModel {
 
     @SerializedName("websitedetails")
     var websitedetails: String? = null
+
+    @SerializedName("currentweek")
+    var currentweek: ArrayList<CurrentWeek>? = null*/
+
+
+
+    /*var clicks: Int = 0
+    var position: Int = 0
+    var impressions: Int = 0
+    var ctr: Int = 0
+
+    var date: Date? = null
+    var keyword: String? = null
+    var country: String? = null
+    var page: URL? = null
 
     @SerializedName("currentweek")
     var currentweek: ArrayList<CurrentWeek>? = null*/
@@ -57,11 +73,11 @@ class ResponseModel {
 
     class WebsitedetailsEntity {
         @SerializedName("currentweek")
-        var currentweek: List<CurrentweekEntity>? = null
+        var currentweek: ArrayList<CurrentweekEntity>? = null
         @SerializedName("lastweek")
-        var lastweek: List<LastweekEntity>? = null
+        var lastweek: ArrayList<LastweekEntity>? = null
         @SerializedName("diff")
-        var diff: List<Int>? = null
+        var diff: ArrayList<Int>? = null
 
         class CurrentweekEntity {
             /**
@@ -71,6 +87,12 @@ class ResponseModel {
 
             @SerializedName("clicks")
             var clicks: Int? = 0
+            @SerializedName("ctr")
+            var ctr: Int? = 0
+            @SerializedName("position")
+            var position: Int? = 0
+            @SerializedName("impressions")
+            var impressions: Int = 0
             @SerializedName("date")
             var date: Date? = null
             @SerializedName("keyword")
@@ -89,6 +111,12 @@ class ResponseModel {
 
             @SerializedName("clicks")
             var clicks: Int? = null
+            @SerializedName("ctr")
+            var ctr: Int? = 0
+            @SerializedName("position")
+            var position: Int? = 0
+            @SerializedName("impressions")
+            var impressions: Int = 0
             @SerializedName("date")
             var date: Date? = null
             @SerializedName("keyword")
