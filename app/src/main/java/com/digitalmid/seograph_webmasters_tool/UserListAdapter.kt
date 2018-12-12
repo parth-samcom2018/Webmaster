@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
-import com.digitalmid.seograph_webmasters_tool.DataResponse
 import com.digitalmid.seograph_webmasters_tool.R
 
 class UserListAdapter(var activity: Activity, var items: ArrayList<UserData>): BaseAdapter() {

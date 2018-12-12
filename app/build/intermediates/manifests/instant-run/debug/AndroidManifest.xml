@@ -47,6 +47,7 @@
         <activity
             android:name="com.digitalmid.seograph_webmasters_tool.SitesListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="true"
             android:label="@string/sites"
             android:theme="@style/AppThemeNoActionBar" >
             <meta-data

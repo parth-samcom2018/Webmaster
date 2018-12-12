@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.digitalmid.seograph_webmasters_tool.R
 
-class CompareListAdapter(val dataList: FragmentActivity, val items: MutableList<UserData>) : RecyclerView.Adapter<CompareListAdapter.ViewHolder>() {
+class CompareListAdapter(val dataList: FragmentActivity, val items: ArrayList<CompareData>) : RecyclerView.Adapter<CompareListAdapter.ViewHolder>() {
 
 
 
@@ -32,24 +32,27 @@ class CompareListAdapter(val dataList: FragmentActivity, val items: MutableList<
 
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindItems(user: UserData) {
+        fun bindItems(user: CompareData) {
             val textClicks = itemView.findViewById<TextView>(R.id.tvClicks)
             val textClicksOld = itemView.findViewById<TextView>(R.id.tv_clicks_old)
             val textKeys = itemView.findViewById<TextView>(R.id.tvKeys)
             val textChange = itemView.findViewById<TextView>(R.id.tv_change_data)
 
+            /*textClicks.text = user.currentweek.toString()
+            textKeys.text = user.lastweek.toString()
+            textChange.text = user.diff.toString()*/
 
             // show data
-            textClicks.text = user.change
-            textClicksOld.text = user.comment
-            textChange.text = user.change
+            /*textClicks.text = user.lastweek.toString()
+            textClicksOld.text = user.diff.toString()
+            textChange.text = user.currentweek.toString()
 
             try {
                 //textKeys?.text = user.getKeys().toString().replace("[", "").replace("]", "");
-                textKeys?.text = user.name
+                textKeys?.text = user.lastweek.toString()
             } catch (e: NullPointerException) {
                 e.printStackTrace()
-            }
+            }*/
         }
     }
 

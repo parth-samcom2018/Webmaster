@@ -242,7 +242,9 @@ class AuthActivity : AppCompatActivity(),
 
 
         Log.d("onrefresh", "token : " + sPref.getString("autoSave",""))
-        Log.d("onrefresh", "token : " + refreshToken)
+        Log.d("onrefresh", "refreshToken : " + refreshToken)
+        Log.d("onrefresh", "accestoken : " + accessToken)
+        Log.d("onrefresh", "id_token : " + googleAccessTokenResponse?.idToken)
 
 
         Log.e("jsondata", userInfoObj.toString())

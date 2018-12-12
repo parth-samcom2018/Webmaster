@@ -61,7 +61,7 @@ class CompareAdapter(val dataList: FragmentActivity, val items: MutableList<ApiD
             //val textPos = itemView.findViewById<TextView>(R.id.tvPosition)
 
             // show data
-            textClicks.text = user.clicks.toString()
+            textClicks.text = user.getClicks().toString()
 
 
             //val textctr = itemView.findViewById<TextView>(R.id.tvCtr)
@@ -83,7 +83,7 @@ class CompareAdapter(val dataList: FragmentActivity, val items: MutableList<ApiD
 
 
             try {
-                textKeys?.text = user.getKeys().toString().replace("[", "").replace("]", "");
+                //textKeys?.text = user.getKeys().toString().replace("[", "").replace("]", "");
 
             } catch (e: NullPointerException) {
                 e.printStackTrace()
