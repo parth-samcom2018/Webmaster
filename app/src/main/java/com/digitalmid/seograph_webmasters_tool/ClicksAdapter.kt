@@ -48,9 +48,7 @@ class ClicksAdapter(activity: FragmentActivity?, val currentWeek: List<CurrentWe
         viewHolder.bindItemsDiff(diff?.get(position))
         //viewHolder.bindData(currentWeek?.get(position))
 
-        if (list!!.getKeyword()!!.contains("keyword")) {
-            viewHolder.bindItemsKeyword(currentWeek?.get(position))
-        }
+
     }
 
 
